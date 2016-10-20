@@ -1,0 +1,61 @@
+﻿@model ContosoUniversityCore.Features.Course.Index.Result
+
+@{
+    ViewBag.Title = "Courses";
+}
+
+<h2>Courses</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<form method="GET">
+    <p>
+        Select Department: @Html.Input(m => m.SelectedDepartment).RemoveClass("form-control")
+        <input type="submit" value="Filter"/>
+    </p>
+</form>
+
+<table class="table">
+    <tr>
+        <th>
+            Number
+        </th>
+        <th>
+            Title
+        </th>
+        <th>
+            Credits
+        </th>
+        <th>
+            Department
+        </th>
+        <th></th>
+    </tr>
+    @{ int i = 0;}
+    @foreach (var item in Model.Courses)
+    {
+        <tr>
+            <td>
+                @Html.Display(modelItem => modelItem.Courses[i].CourseID)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem.Courses[i].Title)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem.Courses[i].Credits)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem.Courses[i].DepartmentName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = item.CourseID}) |
+                @Html.ActionLink("Details", "Details", new {id = item.CourseID}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.CourseID})
+            </td>
+        </tr>
+        i++;
+    }
+
+</table>

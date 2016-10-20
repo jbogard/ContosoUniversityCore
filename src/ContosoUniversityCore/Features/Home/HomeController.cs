@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ContosoUniversityCore.Controllers
+﻿namespace ContosoUniversityCore.Features.Home
 {
+    using System.Data.Entity;
+    using System.Threading.Tasks;
+    using Infrastructure;
+    using Microsoft.AspNetCore.Mvc;
+
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly SchoolContext _db;
+
+        public HomeController(SchoolContext db)
         {
+            _db = db;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var courses = await _db.Courses.ToListAsync();
+            ViewBag.Courses = courses;
             return View();
         }
 

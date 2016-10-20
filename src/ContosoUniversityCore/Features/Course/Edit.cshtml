@@ -1,0 +1,41 @@
+﻿@model ContosoUniversityCore.Features.Course.Edit.Command
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Course</h4>
+        <hr />
+        @Html.ValidationDiv()
+        @Html.Input(model => model.CourseID)
+
+        <div class="form-group">
+            @Html.Label(m => m.CourseID)
+            <div class="col-md-10">
+                @Html.Display(model => model.CourseID)
+            </div>
+        </div>
+
+        @Html.FormBlock(m => m.Title)
+        @Html.FormBlock(m => m.Credits)
+        @Html.FormBlock(m => m.Department)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

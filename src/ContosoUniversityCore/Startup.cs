@@ -10,6 +10,15 @@ using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversityCore
 {
+    using AutoMapper;
+    using FluentValidation.AspNetCore;
+    using HtmlTags;
+    using HtmlTags.Conventions;
+    using Infrastructure;
+    using Infrastructure.Tags;
+    using MediatR;
+    using Microsoft.AspNetCore.Mvc.Razor;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -28,7 +37,35 @@ namespace ContosoUniversityCore
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(opt =>
+                {
+                    opt.Conventions.Add(new FeatureConvention());
+                    opt.Filters.Add(typeof(DbContextTransactionFilter));
+                    opt.ModelBinderProviders.Insert(0, new EntityModelBinderProvider());
+                })
+                .AddRazorOptions(options =>
+                {
+                    // {0} - Action Name
+                    // {1} - Controller Name
+                    // {2} - Area Name
+                    // {3} - Feature Name
+                    // Replace normal view location entirely
+                    options.ViewLocationFormats.Clear();
+                    options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
+                    options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
+                    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+                    options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
+                })
+                .AddFluentValidation(cfg =>
+                {
+                    cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(typeof(Startup));
+            services.AddScoped(_ => new SchoolContext(Configuration["Data:DefaultConnection:ConnectionString"]));
+
+            services.AddHtmlTags(new TagConventions());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

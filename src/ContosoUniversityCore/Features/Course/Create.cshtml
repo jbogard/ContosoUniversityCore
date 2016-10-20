@@ -1,0 +1,34 @@
+﻿@using ContosoUniversityCore.Features.Course
+@model Create.Command
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Course</h4>
+        <hr />
+        @Html.ValidationDiv()
+        @Html.FormBlock(m => m.CourseID)
+        @Html.FormBlock(m => m.Title)
+        @Html.FormBlock(m => m.Credits)
+        @Html.FormBlock(m => m.Department)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", nameof(CourseController.Index))
+</div>

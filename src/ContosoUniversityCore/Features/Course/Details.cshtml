@@ -1,0 +1,50 @@
+﻿@model ContosoUniversityCore.Features.Course.Details.Model
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Department
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.DepartmentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.CourseID)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.CourseID)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.Credits)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.Credits)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
