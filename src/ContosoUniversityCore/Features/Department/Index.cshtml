@@ -1,0 +1,50 @@
+﻿@using ContosoUniversityCore.Features.Department
+@model IList<Index.Model>
+@{
+    ViewBag.Title = "Departments";
+}
+<h2>Departments</h2>
+<p>
+    @Html.ActionLink("Create New", nameof(DepartmentController.Create))
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayLabel(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayLabel(model => model.Budget)
+        </th>
+        <th>
+            @Html.DisplayLabel(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayLabel(model => model.AdministratorFullName)
+        </th>
+        <th></th>
+    </tr>
+    @{ int i = 0; }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.Display(modelItem => modelItem[i].Name)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem[i].Budget)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem[i].StartDate)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem[i].AdministratorFullName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", nameof(DepartmentController.Edit), new Edit.Query { Id = item.DepartmentID }) |
+                @Html.ActionLink("Details", nameof(DepartmentController.Details), new Details.Query { Id = item.DepartmentID }) |
+                @Html.ActionLink("Delete", nameof(DepartmentController.Delete), new Delete.Query { Id = item.DepartmentID })
+            </td>
+        </tr>
+        i++;
+    }
+</table>

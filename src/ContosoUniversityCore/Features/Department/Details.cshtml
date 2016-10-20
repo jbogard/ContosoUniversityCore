@@ -1,0 +1,50 @@
+﻿@using ContosoUniversityCore.Features.Department
+@model Details.Model
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Department</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayLabel(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.Budget)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.Budget)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.AdministratorFullName)
+        </dt>
+        
+        <dd>
+            @Html.Display(model => model.AdministratorFullName)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", nameof(DepartmentController.Edit), new Edit.Query { Id = Model.DepartmentID })
+    @Html.ActionLink("Back to List", nameof(DepartmentController.Index))
+</p>
