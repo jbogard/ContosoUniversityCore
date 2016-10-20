@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-namespace ContosoUniversityCore
+﻿namespace ContosoUniversityCore
 {
     using AutoMapper;
     using FluentValidation.AspNetCore;
     using HtmlTags;
-    using HtmlTags.Conventions;
     using Infrastructure;
     using Infrastructure.Tags;
     using MediatR;
-    using Microsoft.AspNetCore.Mvc.Razor;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public class Startup
     {
@@ -25,8 +18,8 @@ namespace ContosoUniversityCore
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -41,6 +34,7 @@ namespace ContosoUniversityCore
                 {
                     opt.Conventions.Add(new FeatureConvention());
                     opt.Filters.Add(typeof(DbContextTransactionFilter));
+                    opt.Filters.Add(typeof(ValidatorActionFilter));
                     opt.ModelBinderProviders.Insert(0, new EntityModelBinderProvider());
                 })
                 .AddRazorOptions(options =>
@@ -56,15 +50,11 @@ namespace ContosoUniversityCore
                     options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
                     options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
                 })
-                .AddFluentValidation(cfg =>
-                {
-                    cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
-                });
+                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
             services.AddScoped(_ => new SchoolContext(Configuration["Data:DefaultConnection:ConnectionString"]));
-
             services.AddHtmlTags(new TagConventions());
         }
 
@@ -89,8 +79,8 @@ namespace ContosoUniversityCore
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

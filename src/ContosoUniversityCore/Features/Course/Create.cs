@@ -10,8 +10,8 @@
     {
         public class Command : IRequest
         {
-            [Display(Name = "Number")]
-            public int CourseID { get; set; }
+            [IgnoreMap]
+            public int Number { get; set; }
             public string Title { get; set; }
             public int Credits { get; set; }
             public Department Department { get; set; }
@@ -29,6 +29,7 @@
             protected override void HandleCore(Command message)
             {
                 var course = Mapper.Map<Command, Course>(message);
+                course.CourseID = message.Number;
 
                 _db.Courses.Add(course);
             }

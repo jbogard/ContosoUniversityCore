@@ -9,7 +9,7 @@
         {
             CreateMap<Course, Index.Result.Course>();
             CreateMap<Course, Details.Model>();
-            CreateMap<Create.Command, Course>();
+            CreateMap<Create.Command, Course>(MemberList.Source);
             CreateMap<Course, Edit.Command>().ReverseMap();
             CreateMap<Course, Delete.Command>();
         }

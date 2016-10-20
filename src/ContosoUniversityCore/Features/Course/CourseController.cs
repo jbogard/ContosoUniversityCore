@@ -13,14 +13,14 @@
             _mediator = mediator;
         }
 
-        public async Task<ActionResult> Index(Index.Query query)
+        public async Task<IActionResult> Index(Index.Query query)
         {
             var model = await _mediator.SendAsync(query);
 
             return View(model);
         }
 
-        public async Task<ActionResult> Details(Details.Query query)
+        public async Task<IActionResult> Details(Details.Query query)
         {
             var model = await _mediator.SendAsync(query);
 
@@ -34,15 +34,14 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Create.Command command)
+        public IActionResult Create(Create.Command command)
         {
             _mediator.Send(command);
 
-            return null;
-            //return this.RedirectToActionJson("Index");
+            return this.RedirectToActionJson(nameof(Index));
         }
 
-        public async Task<ActionResult> Edit(Edit.Query query)
+        public async Task<IActionResult> Edit(Edit.Query query)
         {
             var model = await _mediator.SendAsync(query);
 
@@ -51,15 +50,14 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Edit.Command command)
+        public async Task<IActionResult> Edit(Edit.Command command)
         {
             await _mediator.SendAsync(command);
 
-            return null;
-            //return this.RedirectToActionJson("Index");
+            return this.RedirectToActionJson(nameof(Index));
         }
 
-        public async Task<ActionResult> Delete(Delete.Query query)
+        public async Task<IActionResult> Delete(Delete.Query query)
         {
             var model = await _mediator.SendAsync(query);
 
@@ -68,12 +66,11 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(Delete.Command command)
+        public async Task<IActionResult> Delete(Delete.Command command)
         {
             await _mediator.SendAsync(command);
 
-            return null;
-            //return this.RedirectToActionJson("Index");
+            return this.RedirectToActionJson(nameof(Index));
         }
     }
 }
