@@ -1,0 +1,128 @@
+﻿@using ContosoUniversityCore.Features.Instructor
+@model Index.Model
+
+@{
+    ViewBag.Title = "Instructors";
+}
+
+<h2>Instructors</h2>
+
+<p>
+    @Html.ActionLink("Create New", nameof(InstructorController.Create))
+</p>
+<table class="table">
+    <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Hire Date</th>
+        <th>Office</th>
+        <th>Courses</th>
+        <th></th>
+    </tr>
+
+    @{ int i = 0; }
+    @foreach (var item in Model.Instructors)
+    {
+        string selectedRow = "";
+        if (item.ID == Model.InstructorID)
+        {
+            selectedRow = "success";
+        }
+        <tr class="@selectedRow">
+            <td>
+                @Html.Display(modelItem => modelItem.Instructors[i].LastName)
+            </td>
+            <td>
+                @Html.Display(modelItem => modelItem.Instructors[i].FirstMidName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Instructors[i].HireDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Instructors[i].OfficeAssignmentLocation)
+            </td>
+            <td>
+                @{
+                    foreach (var course in item.CourseInstructors)
+                    {
+                        @course.CourseID
+                        @: @course.CourseTitle <br/>
+                    }
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Select", nameof(InstructorController.Index), new Index.Query { Id = item.ID }) |
+                @Html.ActionLink("Edit", nameof(InstructorController.Edit), new CreateEdit.Query { Id = item.ID }) |
+                @Html.ActionLink("Details", nameof(InstructorController.Details), new Details.Query { Id = item.ID }) |
+                @Html.ActionLink("Delete", nameof(InstructorController.Delete), new Delete.Query { Id = item.ID })
+            </td>
+        </tr>
+        i++;
+    }
+
+</table>
+
+@if (Model.Courses.Any())
+{
+    <h3>Courses Taught by Selected Instructor</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Number</th>
+            <th>Title</th>
+            <th>Department</th>
+        </tr>
+        @{ i = 0; }
+        @foreach (var item in Model.Courses)
+        {
+            string selectedRow = "";
+            if (item.CourseID == Model.CourseID)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", nameof(InstructorController.Index), new Index.Query {Id = Model.InstructorID, CourseID = item.CourseID})
+                </td>
+                <td>
+                    @item.CourseID
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.DepartmentName
+                </td>
+            </tr>
+            i++;
+        }
+
+    </table>
+}
+
+@if (Model.Enrollments.Any())
+{
+    <h3>
+        Students Enrolled in Selected Course
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Grade</th>
+        </tr>
+        @{ i = 0; }
+        @foreach (var item in Model.Enrollments)
+        {
+            <tr>
+                <td>
+                    @item.StudentFullName
+                </td>
+                <td>
+                    @Html.Display(modelItem => modelItem.Enrollments[i].Grade)
+                </td>
+            </tr>
+            i++;
+        }
+    </table>
+}

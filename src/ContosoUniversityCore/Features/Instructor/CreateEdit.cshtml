@@ -1,0 +1,64 @@
+﻿@using ContosoUniversityCore.Features.Instructor
+@model CreateEdit.Command
+
+@{
+    ViewBag.Title = Model.Id == null ? "Create" : "Edit";
+}
+
+<h2>@(Model.Id == null ? "Create" : "Edit")</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Instructor</h4>
+        <hr />
+        @Html.ValidationDiv()
+        @Html.FormBlock(m => m.LastName)
+        @Html.FormBlock(m => m.FirstMidName)
+        @Html.FormBlock(m => m.HireDate)
+        @Html.FormBlock(m => m.OfficeAssignmentLocation)
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+
+                            foreach (var course in Model.AssignedCourses)
+                            {
+                                if (cnt++ % 3 == 0)
+                                {
+                                    @:</tr><tr>
+                                }
+                                @:<td>
+                                    <label style="font-weight: normal">
+                                        <input type="checkbox"
+                                            name="selectedCourses"
+                                            value="@course.CourseID"
+                                            @(Html.Raw(course.Assigned ? "checked=\"checked\"" : "")) />
+                                            @course.CourseID :  @course.Title
+                                    </label>
+                                @:</td>
+                            }
+                            @:</tr>
+                        }
+                </table>
+            </div>
+        </div>
+                            
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="@(Model.Id == null ? "Create" : "Save")" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", nameof(InstructorController.Index))
+</div>

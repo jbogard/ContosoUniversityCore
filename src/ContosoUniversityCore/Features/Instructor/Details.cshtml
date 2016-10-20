@@ -1,0 +1,51 @@
+﻿@using ContosoUniversityCore.Features.Instructor
+@model Details.Model
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Instructor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayLabel(model => model.OfficeAssignmentLocation)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.OfficeAssignmentLocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.FirstMidName)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.FirstMidName)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.HireDate)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.HireDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", nameof(InstructorController.Edit), new CreateEdit.Query { Id = Model.ID })
+    @Html.ActionLink("Back to List", nameof(InstructorController.Index))
+</p>
