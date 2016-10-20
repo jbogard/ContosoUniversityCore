@@ -1,5 +1,5 @@
 ﻿@using ContosoUniversityCore.Features
-@using ContosoUniversityCore.Features.Department
+@using ContosoUniversityCore.Features.Student
 @model Create.Command
 
 @{
@@ -14,13 +14,12 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Department</h4>
-        <hr/>
+        <h4>Student</h4>
+        <hr />
         @Html.ValidationDiv()
-        @Html.FormBlock(m => m.Name)
-        @Html.FormBlock(m => m.Budget)
-        @Html.FormBlock(m => m.StartDate)
-        @Html.FormBlock(m => m.Administrator)
+        @Html.FormBlock(m => m.LastName)
+        @Html.FormBlock(m => m.FirstMidName)
+        @Html.FormBlock(m => m.EnrollmentDate)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -31,5 +30,6 @@
 }
 
 <div>
-   @Html.ActionLink("Back to List", nameof(DepartmentController.Index))
+    @Html.ActionLink("Back to List", nameof(StudentController.Index))
 </div>
+

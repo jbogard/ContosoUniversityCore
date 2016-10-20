@@ -1,4 +1,4 @@
-﻿namespace ContosoUniversityCore.Infrastructure.Tags
+﻿namespace ContosoUniversityCore.Features
 {
     using System;
     using System.Collections.Generic;

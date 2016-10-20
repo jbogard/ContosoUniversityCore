@@ -1,0 +1,65 @@
+﻿@using ContosoUniversityCore.Features
+@using ContosoUniversityCore.Features.Student
+@model Details.Model
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayLabel(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.FirstMidName)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.FirstMidName)
+        </dd>
+
+        <dt>
+            @Html.DisplayLabel(model => model.EnrollmentDate)
+        </dt>
+
+        <dd>
+            @Html.Display(model => model.EnrollmentDate)
+        </dd>
+        <dt>
+            @Html.DisplayLabel(model => model.Enrollments)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Course Title</th>
+                    <th>Grade</th>
+                </tr>
+                @for (var i = 0; i < Model.Enrollments.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.Display(m => m.Enrollments[i].CourseTitle)
+                        </td>
+                        <td>
+                            @Html.Display(m => m.Enrollments[i].Grade)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", nameof(StudentController.Edit), new Edit.Query { Id = Model.ID }) |
+    @Html.ActionLink("Back to List", nameof(StudentController.Index))
+</p>

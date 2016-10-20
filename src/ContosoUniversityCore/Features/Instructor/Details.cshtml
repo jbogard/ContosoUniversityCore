@@ -1,4 +1,5 @@
-﻿@using ContosoUniversityCore.Features.Instructor
+﻿@using ContosoUniversityCore.Features
+@using ContosoUniversityCore.Features.Instructor
 @model Details.Model
 
 @{
@@ -46,6 +47,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", nameof(InstructorController.Edit), new CreateEdit.Query { Id = Model.ID })
+    @Html.ActionLink("Edit", nameof(InstructorController.Edit), new CreateEdit.Query { Id = Model.ID }) | 
     @Html.ActionLink("Back to List", nameof(InstructorController.Index))
 </p>
