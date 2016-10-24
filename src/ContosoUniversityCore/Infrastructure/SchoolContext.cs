@@ -4,6 +4,7 @@
     using System.Data;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
+    using System.Threading.Tasks;
     using Domain;
 
     public class SchoolContext : DbContext
@@ -43,33 +44,33 @@
             _currentTransaction = Database.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
-        public void CloseTransaction()
-        {
-            CloseTransaction(exception: null);
-        }
-
-        public void CloseTransaction(Exception exception)
+        public async Task CommitTransactionAsync()
         {
             try
             {
-                if (_currentTransaction != null && exception != null)
-                {
-                    _currentTransaction.Rollback();
-                    return;
-                }
-
-                SaveChanges();
+                await SaveChangesAsync();
 
                 _currentTransaction?.Commit();
             }
             catch (Exception)
             {
-                if (_currentTransaction?.UnderlyingTransaction.Connection != null)
+                RollbackTransaction();
+            }
+            finally
+            {
+                if (_currentTransaction != null)
                 {
-                    _currentTransaction.Rollback();
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
                 }
+            }
+        }
 
-                throw;
+        public void RollbackTransaction()
+        {
+            try
+            {
+                _currentTransaction?.Rollback();
             }
             finally
             {

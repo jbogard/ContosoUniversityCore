@@ -4,75 +4,13 @@
     using System.IO;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-    using ContosoUniversityCore.Features.Course;
     using FakeItEasy;
-    using Fixie;
     using Infrastructure;
     using MediatR;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Respawn;
-
-    public class FixturePerClassConvention : Convention
-    {
-        public FixturePerClassConvention()
-        {
-            Classes
-                .IsBddStyleClassNameOrEndsWithTests()
-                .ConstructorHasArguments();
-
-            ClassExecution
-                .CreateInstancePerClass()
-                .Wrap<DeleteData>();
-
-            Parameters.Add(
-                mi =>
-                    (mi.GetParameters().Length == 1) &&
-                    (mi.GetParameters()[0].ParameterType == typeof(ContainerFixture))
-                        ? new[] {new[] {new ContainerFixture()}}
-                        : null);
-        }
-    }
-
-    public class FixturePerMethodConvention : Convention
-    {
-        public FixturePerMethodConvention()
-        {
-            Classes
-                .IsBddStyleClassNameOrEndsWithTests()
-                .ConstructorDoesntHaveArguments();
-
-            ClassExecution
-                .CreateInstancePerCase();
-
-            Parameters.Add(
-                mi =>
-                    (mi.GetParameters().Length == 1) &&
-                    (mi.GetParameters()[0].ParameterType == typeof(ContainerFixture))
-                        ? new[] {new[] {new ContainerFixture()}}
-                        : null);
-
-            FixtureExecution
-                .Wrap<DeleteData>();
-        }
-    }
-
-
-    public class DeleteData : FixtureBehavior, ClassBehavior
-    {
-        public void Execute(Class context, Action next)
-        {
-            ContainerFixture.ResetCheckpoint();
-            next();
-        }
-
-        public void Execute(Fixture context, Action next)
-        {
-            ContainerFixture.ResetCheckpoint();
-            next();
-        }
-    }
 
     public class ContainerFixture
     {
@@ -112,13 +50,14 @@
                     dbContext.BeginTransaction();
 
                     await action(scope.ServiceProvider);
+
+                    await dbContext.CommitTransactionAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    dbContext.CloseTransaction(ex);
+                    dbContext.RollbackTransaction();
                     throw;
                 }
-                dbContext.CloseTransaction();
             }
         }
 
@@ -129,7 +68,7 @@
 
         public async Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
         {
-            TResponse response = default(TResponse);
+            var response = default(TResponse);
             await ExecuteScopeAsync(async sp =>
             {
                 var mediator = sp.GetService<IMediator>();
@@ -141,7 +80,7 @@
 
         public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
-            TResponse response = default(TResponse);
+            var response = default(TResponse);
             await ExecuteScopeAsync(sp =>
             {
                 var mediator = sp.GetService<IMediator>();

@@ -1,9 +1,10 @@
 ﻿namespace ContosoUniversityCore.Infrastructure
 {
     using System;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc.Filters;
 
-    public class DbContextTransactionFilter : IActionFilter
+    public class DbContextTransactionFilter : IAsyncActionFilter
     {
         private readonly SchoolContext _dbContext;
 
@@ -12,27 +13,19 @@
             _dbContext = dbContext;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            _dbContext.BeginTransaction();
-        }
-
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            if (context.Exception != null)
-            {
-                _dbContext.CloseTransaction(context.Exception);
-                return;
-            }
-
             try
             {
-                _dbContext.CloseTransaction();
-            }
-            catch (Exception ex)
-            {
-                _dbContext.CloseTransaction(ex);
+                _dbContext.BeginTransaction();
 
+                await next();
+
+                await _dbContext.CommitTransactionAsync();
+            }
+            catch (Exception)
+            {
+                _dbContext.RollbackTransaction();
                 throw;
             }
         }

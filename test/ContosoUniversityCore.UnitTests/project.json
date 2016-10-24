@@ -1,12 +1,16 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "debugType": "portable"
+    "debugType": "portable",
+    "copyToOutput": {
+      "include": [ "appsettings.json" ]
+    }
   },
   "dependencies": {
     "Fixie": "2.0.0-alpha-0001",
     "ContosoUniversityCore": { "target": "project" },
-    "Shouldly": "2.8.2"
+    "Shouldly": "2.8.2",
+    "FakeItEasy": "2.3.0"
   },
   "testRunner": "fixie",
   "frameworks": {

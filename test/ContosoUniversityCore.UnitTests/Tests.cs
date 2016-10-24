@@ -1,12 +1,13 @@
 ﻿namespace ContosoUniversityCore.UnitTests
 {
+    using AutoMapper;
     using Shouldly;
 
-    public class CalculatorTests
+    public class AutoMapperTests
     {
-        public void ShouldAdd() 
+        public void Should_have_valid_configuration() 
         {
-            (1+1).ShouldBe(2);
+            Mapper.AssertConfigurationIsValid();
         }
     }
 }
