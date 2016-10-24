@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Fixie": "2.0.0-alpha-0001",
+    "ContosoUniversityCore": { "target": "project" },
+    "Shouldly": "2.8.2"
+  },
+  "testRunner": "fixie",
+  "frameworks": {
+    "net452": {
+      "dependencies": {
+        "Microsoft.NETCore.Platforms": "1.0.1"
+      }
+    }
+  }
+}
