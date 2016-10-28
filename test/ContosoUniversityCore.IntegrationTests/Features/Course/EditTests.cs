@@ -10,7 +10,7 @@
 
     public class EditTests
     {
-        public async Task Should_query_for_command(ContainerFixture fixture)
+        public async Task Should_query_for_command(SliceFixture fixture)
         {
             var admin = new Instructor
             {
@@ -60,7 +60,7 @@
             result.Title.ShouldBe(course.Title);
         }
 
-        public async Task Should_edit(ContainerFixture fixture)
+        public async Task Should_edit(SliceFixture fixture)
         {
             var admin = new Instructor
             {

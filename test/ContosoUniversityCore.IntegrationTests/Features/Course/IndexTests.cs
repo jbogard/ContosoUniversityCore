@@ -8,7 +8,7 @@
 
     public class IndexTests
     {
-        public async Task Should_return_all_courses(ContainerFixture fixture)
+        public async Task Should_return_all_courses(SliceFixture fixture)
         {
             var admin = new Instructor
             {
@@ -72,7 +72,7 @@
             result.Courses.Count.ShouldBe(2);
         }
 
-        public async Task Should_filter_courses(ContainerFixture fixture)
+        public async Task Should_filter_courses(SliceFixture fixture)
         {
             var admin = new Instructor
             {

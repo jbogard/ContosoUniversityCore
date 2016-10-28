@@ -10,7 +10,7 @@
 
     public class DeleteTests
     {
-        public async Task Should_query_for_command(ContainerFixture fixture)
+        public async Task Should_query_for_command(SliceFixture fixture)
         {
             var admin = new Instructor
             {
@@ -60,7 +60,7 @@
             result.Title.ShouldBe(course.Title);
         }
 
-        public async Task Should_delete(ContainerFixture fixture)
+        public async Task Should_delete(SliceFixture fixture)
         {
             var admin = new Instructor
             {

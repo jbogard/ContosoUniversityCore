@@ -8,7 +8,7 @@
 
     public class DetailsTests
     {
-        public async Task Should_query_for_details(ContainerFixture fixture)
+        public async Task Should_query_for_details(SliceFixture fixture)
         {
             var admin = new Instructor
             {

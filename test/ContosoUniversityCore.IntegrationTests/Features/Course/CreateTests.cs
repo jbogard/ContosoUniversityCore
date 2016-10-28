@@ -10,7 +10,7 @@
 
     public class CreateTests
     {
-        public async Task Should_create_new_course(ContainerFixture fixture)
+        public async Task Should_create_new_course(SliceFixture fixture)
         {
             var admin = new Instructor
             {

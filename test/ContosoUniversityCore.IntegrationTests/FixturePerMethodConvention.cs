@@ -16,8 +16,8 @@
             Parameters.Add(
                 mi =>
                     (mi.GetParameters().Length == 1) &&
-                    (mi.GetParameters()[0].ParameterType == typeof(ContainerFixture))
-                        ? new[] {new[] {new ContainerFixture()}}
+                    (mi.GetParameters()[0].ParameterType == typeof(SliceFixture))
+                        ? new[] {new[] {new SliceFixture()}}
                         : null);
 
             FixtureExecution

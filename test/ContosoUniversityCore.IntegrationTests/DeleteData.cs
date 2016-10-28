@@ -7,13 +7,13 @@
     {
         public void Execute(Class context, Action next)
         {
-            ContainerFixture.ResetCheckpoint();
+            SliceFixture.ResetCheckpoint();
             next();
         }
 
         public void Execute(Fixture context, Action next)
         {
-            ContainerFixture.ResetCheckpoint();
+            SliceFixture.ResetCheckpoint();
             next();
         }
     }

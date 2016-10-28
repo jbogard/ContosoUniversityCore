@@ -12,14 +12,14 @@
     using Microsoft.Extensions.DependencyInjection;
     using Respawn;
 
-    public class ContainerFixture
+    public class SliceFixture
     {
         private static readonly Checkpoint _checkpoint;
         private static readonly IServiceProvider _rootContainer;
         private static readonly IConfigurationRoot _configuration;
         private static readonly IServiceScopeFactory _scopeFactory;
 
-        static ContainerFixture()
+        static SliceFixture()
         {
             var host = A.Fake<IHostingEnvironment>();
 
@@ -34,7 +34,7 @@
             _checkpoint = new Checkpoint();
         }
 
-        public static void ResetCheckpoint([CallerMemberName] string memberName = "")
+        public static void ResetCheckpoint()
         {
             _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
         }
