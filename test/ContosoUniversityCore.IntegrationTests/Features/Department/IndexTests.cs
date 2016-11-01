@@ -17,11 +17,7 @@
                 HireDate = DateTime.Today,
             };
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync<Person>(admin);
 
             var dept = new Department
             {
@@ -38,12 +34,7 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Departments.Add(dept);
-                db.Departments.Add(dept2);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(dept, dept2);
 
             var query = new Index.Query();
 

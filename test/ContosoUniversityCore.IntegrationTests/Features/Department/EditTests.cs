@@ -16,12 +16,7 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(admin);
 
             var dept = new Department
             {
@@ -30,12 +25,7 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Departments.Add(dept);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(dept);
 
             var query = new Edit.Query
             {
@@ -63,13 +53,7 @@
                 LastName = "Seinfeld",
                 HireDate = DateTime.Today,
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                db.Instructors.Add(admin2);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(admin, admin2);
 
             var dept = new Department
             {
@@ -78,12 +62,7 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Departments.Add(dept);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(dept);
 
             var command = new Edit.Command
             {

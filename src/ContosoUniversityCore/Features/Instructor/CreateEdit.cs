@@ -147,9 +147,9 @@
                 }
                 instructor.FirstMidName = message.FirstMidName;
                 instructor.LastName = message.LastName;
-                instructor.HireDate = message.HireDate.Value;
+                instructor.HireDate = message.HireDate.GetValueOrDefault();
 
-                if (String.IsNullOrWhiteSpace(message.OfficeAssignmentLocation))
+                if (string.IsNullOrWhiteSpace(message.OfficeAssignmentLocation))
                 {
                     instructor.OfficeAssignment = null;
                 }

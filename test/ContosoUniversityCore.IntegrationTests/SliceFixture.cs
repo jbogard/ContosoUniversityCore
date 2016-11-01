@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using FakeItEasy;
     using Infrastructure;
@@ -63,6 +62,27 @@
         public Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
+        }
+
+        public Task InsertAsync<T>(params T[] entities)
+            where T : class
+        {
+            return ExecuteDbContextAsync(async ctx =>
+            {
+                ctx.Set<T>().AddRange(entities);
+                await ctx.SaveChangesAsync();
+            });
+        }
+
+        public async Task<T> FindAsync<T>(object id)
+            where T : class
+        {
+            T entity = null;
+            await ExecuteDbContextAsync(async ctx =>
+            {
+                entity = await ctx.Set<T>().FindAsync(id);
+            });
+            return entity;
         }
 
         public async Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)

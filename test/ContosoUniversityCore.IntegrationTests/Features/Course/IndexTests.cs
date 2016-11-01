@@ -16,11 +16,7 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(admin);
 
             var englishDept = new Department
             {
@@ -36,13 +32,7 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Departments.Add(englishDept);
-                db.Departments.Add(historyDept);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(englishDept, historyDept);
 
             var english = new Course
             {
@@ -58,13 +48,7 @@
                 CourseID = 4312,
                 Title = "History 101"
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Courses.Add(english);
-                db.Courses.Add(history);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(english, history);
 
             var result = await fixture.SendAsync(new Index.Query());
 
@@ -80,11 +64,7 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(admin);
 
             var englishDept = new Department
             {
@@ -100,13 +80,7 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Departments.Add(englishDept);
-                db.Departments.Add(historyDept);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(englishDept, historyDept);
 
             var english = new Course
             {
@@ -122,13 +96,7 @@
                 CourseID = 4312,
                 Title = "History 101"
             };
-
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Courses.Add(english);
-                db.Courses.Add(history);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(english, history);
 
             var result = await fixture.SendAsync(new Index.Query {SelectedDepartment = englishDept});
 

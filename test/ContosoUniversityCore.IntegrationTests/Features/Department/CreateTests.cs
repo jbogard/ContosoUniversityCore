@@ -19,11 +19,7 @@
                 HireDate = DateTime.Today,
             };
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                db.Instructors.Add(admin);
-                await db.SaveChangesAsync();
-            });
+            await fixture.InsertAsync(admin);
 
             var command = new Create.Command
             {
