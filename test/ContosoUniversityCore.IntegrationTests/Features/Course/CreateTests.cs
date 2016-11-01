@@ -18,6 +18,7 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
+
             await fixture.ExecuteDbContextAsync(async db =>
             {
                 db.Instructors.Add(admin);

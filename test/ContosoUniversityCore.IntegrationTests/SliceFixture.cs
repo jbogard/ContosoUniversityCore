@@ -15,7 +15,6 @@
     public class SliceFixture
     {
         private static readonly Checkpoint _checkpoint;
-        private static readonly IServiceProvider _rootContainer;
         private static readonly IConfigurationRoot _configuration;
         private static readonly IServiceScopeFactory _scopeFactory;
 
@@ -29,8 +28,8 @@
             _configuration = startup.Configuration;
             var services = new ServiceCollection();
             startup.ConfigureServices(services);
-            _rootContainer = services.BuildServiceProvider();
-            _scopeFactory = _rootContainer.GetService<IServiceScopeFactory>();
+            var provider = services.BuildServiceProvider();
+            _scopeFactory = provider.GetService<IServiceScopeFactory>();
             _checkpoint = new Checkpoint();
         }
 
