@@ -35,13 +35,13 @@
             {
                 Credits = 4,
                 Department = dept,
-                CourseID = 1234,
+                Id = 1234,
                 Title = "English 101"
             };
 
             await fixture.InsertAsync(course);
 
-            var result = await fixture.SendAsync(new Delete.Query {Id = course.CourseID});
+            var result = await fixture.SendAsync(new Delete.Query {Id = course.Id});
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);
@@ -73,17 +73,17 @@
             {
                 Credits = 4,
                 Department = dept,
-                CourseID = 1234,
+                Id = 1234,
                 Title = "English 101"
             };
 
             await fixture.InsertAsync(course);
 
-            await fixture.SendAsync(new Delete.Command {CourseID = course.CourseID});
+            await fixture.SendAsync(new Delete.Command {Id = course.Id});
 
             await fixture.ExecuteDbContextAsync(async db =>
             {
-                var result = await db.Courses.Where(c => c.CourseID == course.CourseID).SingleOrDefaultAsync();
+                var result = await db.Courses.Where(c => c.Id == course.Id).SingleOrDefaultAsync();
 
                 result.ShouldBeNull();
             });

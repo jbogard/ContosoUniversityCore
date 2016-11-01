@@ -38,14 +38,14 @@
             {
                 Credits = 4,
                 Department = englishDept,
-                CourseID = 1235,
+                Id = 1235,
                 Title = "English 101"
             };
             var history = new Course
             {
                 Credits = 4,
                 Department = historyDept,
-                CourseID = 4312,
+                Id = 4312,
                 Title = "History 101"
             };
             await fixture.InsertAsync(english, history);
@@ -86,14 +86,14 @@
             {
                 Credits = 4,
                 Department = englishDept,
-                CourseID = 1235,
+                Id = 1235,
                 Title = "English 101"
             };
             var history = new Course
             {
                 Credits = 4,
                 Department = historyDept,
-                CourseID = 4312,
+                Id = 4312,
                 Title = "History 101"
             };
             await fixture.InsertAsync(english, history);
@@ -102,7 +102,7 @@
 
             result.ShouldNotBeNull();
             result.Courses.Count.ShouldBe(1);
-            result.Courses[0].CourseID.ShouldBe(english.CourseID);
+            result.Courses[0].Id.ShouldBe(english.Id);
         }
     }
 }

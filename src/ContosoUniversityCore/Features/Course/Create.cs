@@ -29,7 +29,7 @@
             protected override void HandleCore(Command message)
             {
                 var course = Mapper.Map<Command, Course>(message);
-                course.CourseID = message.Number;
+                course.Id = message.Number;
 
                 _db.Courses.Add(course);
             }

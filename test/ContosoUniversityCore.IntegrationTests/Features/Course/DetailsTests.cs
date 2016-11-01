@@ -33,13 +33,13 @@
             {
                 Credits = 4,
                 Department = dept,
-                CourseID = 1234,
+                Id = 1234,
                 Title = "English 101"
             };
 
             await fixture.InsertAsync(course);
 
-            var result = await fixture.SendAsync(new Details.Query { Id = course.CourseID });
+            var result = await fixture.SendAsync(new Details.Query { Id = course.Id });
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);

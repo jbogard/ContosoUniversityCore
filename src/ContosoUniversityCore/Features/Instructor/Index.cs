@@ -54,7 +54,7 @@
 
             public class Course
             {
-                public int CourseID { get; set; }
+                public int Id { get; set; }
                 public string Title { get; set; }
                 public string DepartmentName { get; set; }
             }

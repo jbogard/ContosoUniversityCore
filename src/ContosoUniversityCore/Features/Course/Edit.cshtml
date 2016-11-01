@@ -16,12 +16,12 @@
         <h4>Course</h4>
         <hr />
         @Html.ValidationDiv()
-        @Html.Input(model => model.CourseID)
+        @Html.Input(model => model.Id)
 
         <div class="form-group">
-            @Html.Label(m => m.CourseID)
+            @Html.Label(m => m.Id)
             <div class="col-md-10">
-                @Html.Display(model => model.CourseID)
+                @Html.Display(model => model.Id)
             </div>
         </div>
 

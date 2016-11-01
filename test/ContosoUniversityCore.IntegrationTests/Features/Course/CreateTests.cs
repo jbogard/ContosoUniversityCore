@@ -42,7 +42,7 @@
 
             await fixture.ExecuteDbContextAsync(async db =>
             {
-                var created = await db.Courses.Where(c => c.CourseID == command.Number).SingleOrDefaultAsync();
+                var created = await db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync();
 
                 created.ShouldNotBeNull();
                 created.DepartmentID.ShouldBe(dept.DepartmentID);

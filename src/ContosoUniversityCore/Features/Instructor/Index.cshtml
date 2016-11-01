@@ -77,16 +77,16 @@
         @foreach (var item in Model.Courses)
         {
             string selectedRow = "";
-            if (item.CourseID == Model.CourseID)
+            if (item.Id == Model.CourseID)
             {
                 selectedRow = "success";
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.ActionLink("Select", nameof(InstructorController.Index), new Index.Query {Id = Model.InstructorID, CourseID = item.CourseID})
+                    @Html.ActionLink("Select", nameof(InstructorController.Index), new Index.Query {Id = Model.InstructorID, CourseID = item.Id})
                 </td>
                 <td>
-                    @item.CourseID
+                    @item.Id
                 </td>
                 <td>
                     @item.Title

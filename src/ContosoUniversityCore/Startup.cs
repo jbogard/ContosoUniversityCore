@@ -53,6 +53,9 @@
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             services.AddAutoMapper(typeof(Startup));
+
+            Mapper.AssertConfigurationIsValid();
+
             services.AddMediatR(typeof(Startup));
             services.AddScoped(_ => new SchoolContext(Configuration["Data:DefaultConnection:ConnectionString"]));
             services.AddHtmlTags(new TagConventions());

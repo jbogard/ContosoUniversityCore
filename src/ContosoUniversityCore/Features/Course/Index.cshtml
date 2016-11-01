@@ -38,7 +38,7 @@
     {
         <tr>
             <td>
-                @Html.Display(modelItem => modelItem.Courses[i].CourseID)
+                @Html.Display(modelItem => modelItem.Courses[i].Id)
             </td>
             <td>
                 @Html.Display(modelItem => modelItem.Courses[i].Title)
@@ -50,9 +50,9 @@
                 @Html.Display(modelItem => modelItem.Courses[i].DepartmentName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.CourseID}) |
-                @Html.ActionLink("Details", "Details", new {id = item.CourseID}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.CourseID})
+                @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.Id})
             </td>
         </tr>
         i++;

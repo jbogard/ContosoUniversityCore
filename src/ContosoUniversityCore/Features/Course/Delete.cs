@@ -34,14 +34,14 @@
 
             public async Task<Command> Handle(Query message)
             {
-                return await _db.Courses.Where(c => c.CourseID == message.Id).ProjectToSingleOrDefaultAsync<Command>();
+                return await _db.Courses.Where(c => c.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
         public class Command : IAsyncRequest
         {
             [Display(Name = "Number")]
-            public int CourseID { get; set; }
+            public int Id { get; set; }
             public string Title { get; set; }
             public int Credits { get; set; }
             public string DepartmentName { get; set; }
@@ -58,7 +58,7 @@
 
             protected override async Task HandleCore(Command message)
             {
-                var course = await _db.Courses.FindAsync(message.CourseID);
+                var course = await _db.Courses.FindAsync(message.Id);
 
                 _db.Courses.Remove(course);
             }

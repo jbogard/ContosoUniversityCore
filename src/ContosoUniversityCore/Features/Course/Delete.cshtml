@@ -21,11 +21,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayLabel(model => model.CourseID)
+            @Html.DisplayLabel(model => model.Id)
         </dt>
 
         <dd>
-            @Html.Display(model => model.CourseID)
+            @Html.Display(model => model.Id)
         </dd>
 
         <dt>
@@ -49,7 +49,7 @@
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
-        @Html.Input(m => m.CourseID)
+        @Html.Input(m => m.Id)
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")

@@ -33,12 +33,12 @@
             {
                 Credits = 4,
                 Department = dept,
-                CourseID = 1234,
+                Id = 1234,
                 Title = "English 101"
             };
             await fixture.InsertAsync(course);
 
-            var result = await fixture.SendAsync(new Edit.Query { Id = course.CourseID });
+            var result = await fixture.SendAsync(new Edit.Query { Id = course.Id });
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);
@@ -76,21 +76,21 @@
             {
                 Credits = 4,
                 Department = dept,
-                CourseID = 1234,
+                Id = 1234,
                 Title = "English 101"
             };
             await fixture.InsertAsync(course);
 
             var command = new Edit.Command
             {
-                CourseID = course.CourseID,
+                Id = course.Id,
                 Credits = 5,
                 Department = newDept,
                 Title = "English 202"
             };
             await fixture.SendAsync(command);
 
-            var edited = await fixture.FindAsync<Course>(course.CourseID);
+            var edited = await fixture.FindAsync<Course>(course.Id);
 
             edited.ShouldNotBeNull();
             edited.DepartmentID.ShouldBe(newDept.DepartmentID);

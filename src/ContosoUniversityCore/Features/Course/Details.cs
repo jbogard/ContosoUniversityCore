@@ -24,7 +24,7 @@
 
         public class Model
         {
-            public int CourseID { get; set; }
+            public int Id { get; set; }
             public string Title { get; set; }
             public int Credits { get; set; }
             public string DepartmentName { get; set; }
@@ -41,7 +41,7 @@
 
             public async Task<Model> Handle(Query message)
             {
-                return await _db.Courses.Where(i => i.CourseID == message.Id).ProjectToSingleOrDefaultAsync<Model>();
+                return await _db.Courses.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
             }
         }
     }
