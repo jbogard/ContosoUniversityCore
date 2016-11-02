@@ -23,7 +23,7 @@
 
             public DateTime StartDate { get; set; }
 
-            public int DepartmentID { get; set; }
+            public int Id { get; set; }
 
             [Display(Name = "Administrator")]
             public string AdministratorFullName { get; set; }
@@ -43,7 +43,7 @@
             public async Task<Command> Handle(Query message)
             {
                 var department = await _db.Departments
-                    .Where(d => d.DepartmentID == message.Id)
+                    .Where(d => d.Id == message.Id)
                     .ProjectToSingleOrDefaultAsync<Command>();
 
                 return department;
@@ -61,7 +61,7 @@
 
             protected override async Task HandleCore(Command message)
             {
-                var department = await _db.Departments.FindAsync(message.DepartmentID);
+                var department = await _db.Departments.FindAsync(message.Id);
 
                 _db.Departments.Remove(department);
             }

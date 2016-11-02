@@ -6,7 +6,7 @@
     {
         protected override int GetValue(Department instance)
         {
-            return instance.DepartmentID;
+            return instance.Id;
         }
 
         protected override string GetDisplayValue(Department instance)

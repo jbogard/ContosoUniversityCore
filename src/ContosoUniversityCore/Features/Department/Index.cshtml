@@ -41,9 +41,9 @@
                 @Html.Display(modelItem => modelItem[i].AdministratorFullName)
             </td>
             <td>
-                @Html.ActionLink("Edit", nameof(DepartmentController.Edit), new Edit.Query { Id = item.DepartmentID }) |
-                @Html.ActionLink("Details", nameof(DepartmentController.Details), new Details.Query { Id = item.DepartmentID }) |
-                @Html.ActionLink("Delete", nameof(DepartmentController.Delete), new Delete.Query { Id = item.DepartmentID })
+                @Html.ActionLink("Edit", nameof(DepartmentController.Edit), new Edit.Query { Id = item.Id }) |
+                @Html.ActionLink("Details", nameof(DepartmentController.Details), new Details.Query { Id = item.Id }) |
+                @Html.ActionLink("Delete", nameof(DepartmentController.Delete), new Delete.Query { Id = item.Id })
             </td>
         </tr>
         i++;

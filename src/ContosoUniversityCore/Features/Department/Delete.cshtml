@@ -50,7 +50,7 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.Input(model => model.DepartmentID)
+        @Html.Input(model => model.Id)
         @Html.Input(model => model.RowVersion)
 
         <div class="form-actions no-color">

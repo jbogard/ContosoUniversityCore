@@ -30,7 +30,7 @@
 
             var command = new Delete.Command
             {
-                DepartmentID = dept.DepartmentID,
+                Id = dept.Id,
                 RowVersion = dept.RowVersion
             };
 

@@ -7,7 +7,8 @@ namespace ContosoUniversityCore.Domain
 {
     public class Department : IEntity
     {
-        public int DepartmentID { get; set; }
+        [Column("DepartmentID")]
+        public int Id { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }

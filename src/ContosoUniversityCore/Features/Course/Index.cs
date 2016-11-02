@@ -40,7 +40,7 @@
 
             public async Task<Result> Handle(Query message)
             {
-                int? departmentID = message.SelectedDepartment?.DepartmentID;
+                int? departmentID = message.SelectedDepartment?.Id;
 
                 var courses = await _db.Courses
                     .Where(c => !departmentID.HasValue || c.DepartmentID == departmentID)

@@ -29,7 +29,7 @@
 
             var query = new Edit.Query
             {
-                Id = dept.DepartmentID
+                Id = dept.Id
             };
 
             var result = await fixture.SendAsync(query);
@@ -66,7 +66,7 @@
 
             var command = new Edit.Command
             {
-                DepartmentID = dept.DepartmentID,
+                Id = dept.Id,
                 Name = "English",
                 Administrator = admin2,
                 StartDate = DateTime.Today.AddDays(-1),
@@ -77,7 +77,7 @@
 
             await fixture.ExecuteDbContextAsync(async db =>
             {
-                var result = await db.Departments.FindAsync(dept.DepartmentID);
+                var result = await db.Departments.FindAsync(dept.Id);
 
                 result.Name.ShouldBe(command.Name);
                 result.Administrator.ID.ShouldBe(command.Administrator.ID);

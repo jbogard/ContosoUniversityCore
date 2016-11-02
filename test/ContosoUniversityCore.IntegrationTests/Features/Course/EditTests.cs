@@ -42,7 +42,7 @@
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);
-            result.Department.DepartmentID.ShouldBe(dept.DepartmentID);
+            result.Department.Id.ShouldBe(dept.Id);
             result.Title.ShouldBe(course.Title);
         }
 
@@ -93,7 +93,7 @@
             var edited = await fixture.FindAsync<Course>(course.Id);
 
             edited.ShouldNotBeNull();
-            edited.DepartmentID.ShouldBe(newDept.DepartmentID);
+            edited.DepartmentID.ShouldBe(newDept.Id);
             edited.Credits.ShouldBe(command.Credits.GetValueOrDefault());
             edited.Title.ShouldBe(command.Title);
         }

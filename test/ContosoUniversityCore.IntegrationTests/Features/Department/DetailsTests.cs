@@ -30,7 +30,7 @@
 
             var query = new Details.Query
             {
-                Id = dept.DepartmentID
+                Id = dept.Id
             };
 
             var result = await fixture.SendAsync(query);

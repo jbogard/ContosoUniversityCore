@@ -45,7 +45,7 @@
                 var created = await db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync();
 
                 created.ShouldNotBeNull();
-                created.DepartmentID.ShouldBe(dept.DepartmentID);
+                created.DepartmentID.ShouldBe(dept.Id);
                 created.Credits.ShouldBe(command.Credits);
                 created.Title.ShouldBe(command.Title);
             });

@@ -22,7 +22,7 @@
 
             public DateTime StartDate { get; set; }
 
-            public int DepartmentID { get; set; }
+            public int Id { get; set; }
 
             [Display(Name = "Administrator")]
             public string AdministratorFullName { get; set; }
