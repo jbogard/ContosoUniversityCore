@@ -38,7 +38,7 @@
                 created.ShouldNotBeNull();
                 created.Budget.ShouldBe(command.Budget.GetValueOrDefault());
                 created.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
-                created.InstructorID.ShouldBe(admin.ID);
+                created.InstructorID.ShouldBe(admin.Id);
             });
         }
 

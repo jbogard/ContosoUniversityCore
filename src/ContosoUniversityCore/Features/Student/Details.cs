@@ -44,7 +44,7 @@
 
             public async Task<Model> Handle(Query message)
             {
-                return await _db.Students.Where(s => s.ID == message.Id).ProjectToSingleOrDefaultAsync<Model>();
+                return await _db.Students.Where(s => s.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
             }
         }
     }

@@ -57,7 +57,7 @@
             public async Task<Command> Handle(Query message)
             {
                 return await _db.Students
-                    .Where(s => s.ID == message.Id)
+                    .Where(s => s.Id == message.Id)
                     .ProjectToSingleOrDefaultAsync<Command>();
             }
         }

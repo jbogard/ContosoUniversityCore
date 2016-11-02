@@ -50,7 +50,7 @@
 
             public async Task<Model> Handle(Query message)
             {
-                return await _db.Instructors.Where(i => i.ID == message.Id).ProjectToSingleOrDefaultAsync<Model>();
+                return await _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
             }
         }
     }

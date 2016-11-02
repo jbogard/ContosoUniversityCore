@@ -98,7 +98,7 @@
                 else
                 {
                     model = await _db.Instructors
-                        .Where(i => i.ID == message.Id)
+                        .Where(i => i.Id == message.Id)
                         .ProjectToSingleOrDefaultAsync<Command>();
                 }
 
@@ -144,7 +144,7 @@
                     instructor = await _db.Instructors
                         .Include(i => i.OfficeAssignment)
                         .Include(i => i.CourseInstructors)
-                        .Where(i => i.ID == message.Id)
+                        .Where(i => i.Id == message.Id)
                         .SingleAsync();
                 }
                 instructor.FirstMidName = message.FirstMidName;

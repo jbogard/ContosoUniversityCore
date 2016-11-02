@@ -6,7 +6,7 @@
     {
         protected override int GetValue(Instructor instance)
         {
-            return instance.ID;
+            return instance.Id;
         }
 
         protected override string GetDisplayValue(Instructor instance)

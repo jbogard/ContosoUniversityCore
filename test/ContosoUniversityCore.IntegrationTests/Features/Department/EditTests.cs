@@ -36,7 +36,7 @@
 
             result.ShouldNotBeNull();
             result.Name.ShouldBe(dept.Name);
-            result.Administrator.ID.ShouldBe(admin.ID);
+            result.Administrator.Id.ShouldBe(admin.Id);
         }
 
         public async Task Should_edit_department(SliceFixture fixture)
@@ -80,7 +80,7 @@
                 var result = await db.Departments.FindAsync(dept.Id);
 
                 result.Name.ShouldBe(command.Name);
-                result.Administrator.ID.ShouldBe(command.Administrator.ID);
+                result.Administrator.Id.ShouldBe(command.Administrator.Id);
                 result.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
                 result.Budget.ShouldBe(command.Budget.GetValueOrDefault());
             });

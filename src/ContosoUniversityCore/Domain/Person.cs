@@ -7,7 +7,7 @@ namespace ContosoUniversityCore.Domain
 
     public abstract class Person
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

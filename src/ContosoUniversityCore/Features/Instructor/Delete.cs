@@ -52,7 +52,7 @@
 
             public async Task<Command> Handle(Query message)
             {
-                return await _db.Instructors.Where(i => i.ID == message.Id).ProjectToSingleOrDefaultAsync<Command>();
+                return await _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
@@ -69,7 +69,7 @@
             {
                 Instructor instructor = await _db.Instructors
                     .Include(i => i.OfficeAssignment)
-                    .Where(i => i.ID == message.ID)
+                    .Where(i => i.Id == message.ID)
                     .SingleAsync();
 
                 instructor.OfficeAssignment = null;
