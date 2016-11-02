@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Course
+    public class Course : IEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Number")]

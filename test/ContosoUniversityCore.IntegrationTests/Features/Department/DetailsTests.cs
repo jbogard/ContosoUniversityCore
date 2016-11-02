@@ -17,7 +17,6 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.InsertAsync(admin);
 
             var dept = new Department
             {
@@ -26,7 +25,7 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-            await fixture.InsertAsync(dept);
+            await fixture.InsertAsync(admin, dept);
 
             var query = new Details.Query
             {

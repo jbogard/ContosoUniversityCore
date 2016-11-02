@@ -19,8 +19,6 @@
                 HireDate = DateTime.Today,
             };
 
-            await fixture.InsertAsync(admin);
-
             var dept = new Department
             {
                 Name = "History",
@@ -29,7 +27,7 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(dept);
+            await fixture.InsertAsync(admin, dept);
 
             var command = new Create.Command
             {

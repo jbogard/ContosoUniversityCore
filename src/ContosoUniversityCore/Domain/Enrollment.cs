@@ -9,7 +9,7 @@ namespace ContosoUniversityCore.Domain
         A, B, C, D, F
     }
 
-    public class Enrollment
+    public class Enrollment : IEntity
     {
         [Column("EnrollmentID")]
         public int Id { get; set; }

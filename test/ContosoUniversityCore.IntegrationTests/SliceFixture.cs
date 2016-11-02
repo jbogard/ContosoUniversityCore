@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Threading.Tasks;
+    using Domain;
     using FakeItEasy;
     using Infrastructure;
     using MediatR;
@@ -64,20 +65,22 @@
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public Task InsertAsync<T>(params T[] entities)
-            where T : class
+        public Task InsertAsync(params IEntity[] entities)
         {
             return ExecuteDbContextAsync(async ctx =>
             {
-                ctx.Set<T>().AddRange(entities);
+                foreach (var entity in entities)
+                {
+                    ctx.Set(entity.GetType()).Add(entity);
+                }
                 await ctx.SaveChangesAsync();
             });
         }
 
-        public async Task<T> FindAsync<T>(object id)
-            where T : class
+        public async Task<T> FindAsync<T>(int id)
+            where T : class, IEntity
         {
-            T entity = null;
+            T entity = default(T);
             await ExecuteDbContextAsync(async ctx =>
             {
                 entity = await ctx.Set<T>().FindAsync(id);

@@ -17,8 +17,6 @@
                 HireDate = DateTime.Today,
             };
 
-            await fixture.InsertAsync<Person>(admin);
-
             var dept = new Department
             {
                 Name = "History",
@@ -34,7 +32,7 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(dept, dept2);
+            await fixture.InsertAsync(admin, dept, dept2);
 
             var query = new Index.Query();
 

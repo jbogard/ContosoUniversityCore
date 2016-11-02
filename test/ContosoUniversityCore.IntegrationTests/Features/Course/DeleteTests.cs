@@ -19,8 +19,6 @@
                 HireDate = DateTime.Today,
             };
 
-            await fixture.InsertAsync(admin);
-
             var dept = new Department
             {
                 Name = "History",
@@ -28,8 +26,6 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-
-            await fixture.InsertAsync(dept);
 
             var course = new Course
             {
@@ -39,7 +35,7 @@
                 Title = "English 101"
             };
 
-            await fixture.InsertAsync(course);
+            await fixture.InsertAsync(admin, dept, course);
 
             var result = await fixture.SendAsync(new Delete.Query {Id = course.Id});
 
@@ -57,7 +53,6 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.InsertAsync(admin);
 
             var dept = new Department
             {
@@ -67,8 +62,6 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(dept);
-
             var course = new Course
             {
                 Credits = 4,
@@ -77,7 +70,7 @@
                 Title = "English 101"
             };
 
-            await fixture.InsertAsync(course);
+            await fixture.InsertAsync(admin, dept, course);
 
             await fixture.SendAsync(new Delete.Command {Id = course.Id});
 

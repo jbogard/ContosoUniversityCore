@@ -16,7 +16,6 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.InsertAsync(admin);
 
             var englishDept = new Department
             {
@@ -32,7 +31,6 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-            await fixture.InsertAsync(englishDept, historyDept);
 
             var english = new Course
             {
@@ -48,7 +46,7 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(english, history);
+            await fixture.InsertAsync(admin, englishDept, historyDept, english, history);
 
             var result = await fixture.SendAsync(new Index.Query());
 
@@ -64,7 +62,6 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.InsertAsync(admin);
 
             var englishDept = new Department
             {
@@ -80,7 +77,6 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-            await fixture.InsertAsync(englishDept, historyDept);
 
             var english = new Course
             {
@@ -96,7 +92,7 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(english, history);
+            await fixture.InsertAsync(admin, englishDept, historyDept, english, history);
 
             var result = await fixture.SendAsync(new Index.Query {SelectedDepartment = englishDept});
 

@@ -5,7 +5,7 @@ namespace ContosoUniversityCore.Domain
 {
     using DelegateDecompiler;
 
-    public abstract class Person
+    public abstract class Person : IEntity
     {
         public int Id { get; set; }
 
