@@ -35,12 +35,9 @@
 
             await fixture.SendAsync(command);
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                var any = await db.Departments.AnyAsync();
+            var any = await fixture.ExecuteDbContextAsync(db => db.Departments.AnyAsync());
 
-                any.ShouldBeFalse();
-            });
+            any.ShouldBeFalse();
         }
     }
 }

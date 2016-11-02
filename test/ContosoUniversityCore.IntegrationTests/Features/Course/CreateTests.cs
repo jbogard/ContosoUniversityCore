@@ -38,15 +38,12 @@
             };
             await fixture.SendAsync(command);
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                var created = await db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync();
+            var created = await fixture.ExecuteDbContextAsync(db => db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync());
 
-                created.ShouldNotBeNull();
-                created.DepartmentID.ShouldBe(dept.Id);
-                created.Credits.ShouldBe(command.Credits);
-                created.Title.ShouldBe(command.Title);
-            });
+            created.ShouldNotBeNull();
+            created.DepartmentID.ShouldBe(dept.Id);
+            created.Credits.ShouldBe(command.Credits);
+            created.Title.ShouldBe(command.Title);
         }
     }
 }

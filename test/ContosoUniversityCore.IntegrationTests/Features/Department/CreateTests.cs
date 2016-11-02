@@ -31,16 +31,12 @@
 
             await fixture.SendAsync(command);
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                var created = await db.Departments.Where(d => d.Name == command.Name).SingleOrDefaultAsync();
+            var created = await fixture.ExecuteDbContextAsync(db => db.Departments.Where(d => d.Name == command.Name).SingleOrDefaultAsync());
 
-                created.ShouldNotBeNull();
-                created.Budget.ShouldBe(command.Budget.GetValueOrDefault());
-                created.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
-                created.InstructorID.ShouldBe(admin.Id);
-            });
+            created.ShouldNotBeNull();
+            created.Budget.ShouldBe(command.Budget.GetValueOrDefault());
+            created.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
+            created.InstructorID.ShouldBe(admin.Id);
         }
-
     }
 }

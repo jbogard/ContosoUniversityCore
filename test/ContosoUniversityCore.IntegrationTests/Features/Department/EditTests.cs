@@ -1,6 +1,8 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
     using System;
+    using System.Data.Entity;
+    using System.Linq;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Department;
     using Domain;
@@ -73,15 +75,12 @@
 
             await fixture.SendAsync(command);
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                var result = await db.Departments.FindAsync(dept.Id);
+            var result = await fixture.ExecuteDbContextAsync(db => db.Departments.Where(d => d.Id == dept.Id).Include(d => d.Administrator).SingleOrDefaultAsync());
 
-                result.Name.ShouldBe(command.Name);
-                result.Administrator.Id.ShouldBe(command.Administrator.Id);
-                result.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
-                result.Budget.ShouldBe(command.Budget.GetValueOrDefault());
-            });
+            result.Name.ShouldBe(command.Name);
+            result.Administrator.Id.ShouldBe(command.Administrator.Id);
+            result.StartDate.ShouldBe(command.StartDate.GetValueOrDefault());
+            result.Budget.ShouldBe(command.Budget.GetValueOrDefault());
         }
     }
 }

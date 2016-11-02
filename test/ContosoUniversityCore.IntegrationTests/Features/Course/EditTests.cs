@@ -18,7 +18,6 @@
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             };
-            await fixture.InsertAsync(admin);
 
             var dept = new Department
             {
@@ -27,7 +26,6 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-            await fixture.InsertAsync(dept);
 
             var course = new Course
             {
@@ -36,7 +34,7 @@
                 Id = 1234,
                 Title = "English 101"
             };
-            await fixture.InsertAsync(course);
+            await fixture.InsertAsync(admin, dept, course);
 
             var result = await fixture.SendAsync(new Edit.Query { Id = course.Id });
 

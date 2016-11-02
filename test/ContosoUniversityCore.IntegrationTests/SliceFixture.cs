@@ -60,32 +60,56 @@
             }
         }
 
+        public async Task<T> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T>> action)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<SchoolContext>();
+
+                try
+                {
+                    dbContext.BeginTransaction();
+
+                    var result = await action(scope.ServiceProvider);
+
+                    await dbContext.CommitTransactionAsync();
+
+                    return result;
+                }
+                catch (Exception)
+                {
+                    dbContext.RollbackTransaction();
+                    throw;
+                }
+            }
+        }
+
         public Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
+        {
+            return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
+        }
+
+        public Task<T> ExecuteDbContextAsync<T>(Func<SchoolContext, Task<T>> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
         public Task InsertAsync(params IEntity[] entities)
         {
-            return ExecuteDbContextAsync(async ctx =>
+            return ExecuteDbContextAsync(db =>
             {
                 foreach (var entity in entities)
                 {
-                    ctx.Set(entity.GetType()).Add(entity);
+                    db.Set(entity.GetType()).Add(entity);
                 }
-                await ctx.SaveChangesAsync();
+                return db.SaveChangesAsync();
             });
         }
 
-        public async Task<T> FindAsync<T>(int id)
+        public Task<T> FindAsync<T>(int id)
             where T : class, IEntity
         {
-            T entity = default(T);
-            await ExecuteDbContextAsync(async ctx =>
-            {
-                entity = await ctx.Set<T>().FindAsync(id);
-            });
-            return entity;
+            return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
         }
 
         public async Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)

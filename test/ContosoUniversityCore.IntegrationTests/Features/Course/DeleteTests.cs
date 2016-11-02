@@ -74,12 +74,9 @@
 
             await fixture.SendAsync(new Delete.Command {Id = course.Id});
 
-            await fixture.ExecuteDbContextAsync(async db =>
-            {
-                var result = await db.Courses.Where(c => c.Id == course.Id).SingleOrDefaultAsync();
+            var result = await fixture.ExecuteDbContextAsync(db => db.Courses.Where(c => c.Id == course.Id).SingleOrDefaultAsync());
 
-                result.ShouldBeNull();
-            });
+            result.ShouldBeNull();
         }
     }
 }
