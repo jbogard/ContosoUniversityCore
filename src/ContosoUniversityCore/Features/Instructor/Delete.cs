@@ -50,9 +50,9 @@
                 _db = db;
             }
 
-            public async Task<Command> Handle(Query message)
+            public Task<Command> Handle(Query message)
             {
-                return await _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
+                return _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
