@@ -112,30 +112,26 @@
             return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
         }
 
-        public async Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
+        public Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
         {
-            var response = default(TResponse);
-            await ExecuteScopeAsync(async sp =>
+            return ExecuteScopeAsync(sp =>
             {
                 var mediator = sp.GetService<IMediator>();
 
-                response = await mediator.SendAsync(request);
+                return mediator.SendAsync(request);
             });
-            return response;
         }
 
-        public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+        public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
-            var response = default(TResponse);
-            await ExecuteScopeAsync(sp =>
+            return ExecuteScopeAsync(sp =>
             {
                 var mediator = sp.GetService<IMediator>();
 
-                response = mediator.Send(request);
+                var response = mediator.Send(request);
 
-                return Task.FromResult(0);
+                return Task.FromResult(response);
             });
-            return response;
         }
     }
 }

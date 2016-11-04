@@ -182,6 +182,7 @@
                 var selectedCoursesHS = new HashSet<string>(selectedCourses);
                 var instructorCourses = new HashSet<int>
                     (instructorToUpdate.CourseInstructors.Select(c => c.CourseID));
+
                 foreach (var course in _db.Courses)
                 {
                     if (selectedCoursesHS.Contains(course.Id.ToString()))
@@ -195,7 +196,7 @@
                     {
                         if (instructorCourses.Contains(course.Id))
                         {
-                            var toRemove = instructorToUpdate.CourseInstructors.Where(ci => ci.CourseID == course.Id).Single();
+                            var toRemove = instructorToUpdate.CourseInstructors.Single(ci => ci.CourseID == course.Id);
                             instructorToUpdate.CourseInstructors.Remove(toRemove);
                         }
                     }

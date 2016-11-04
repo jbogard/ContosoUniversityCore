@@ -20,7 +20,7 @@
         public int DepartmentID { get; set; }
 
         public virtual Department Department { get; set; }
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<CourseInstructor> CourseInstructors { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public virtual ICollection<CourseInstructor> CourseInstructors { get; set; } = new List<CourseInstructor>();
     }
 }

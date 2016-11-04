@@ -11,7 +11,7 @@ namespace ContosoUniversityCore.Domain
         [Display(Name = "Hire Date")]
         public DateTime HireDate { get; set; }
 
-        public virtual ICollection<CourseInstructor> CourseInstructors { get; set; }
+        public virtual ICollection<CourseInstructor> CourseInstructors { get; set; } = new List<CourseInstructor>();
         public virtual OfficeAssignment OfficeAssignment { get; set; }
     }
 
