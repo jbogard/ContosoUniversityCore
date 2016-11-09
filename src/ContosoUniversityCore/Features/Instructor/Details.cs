@@ -48,9 +48,9 @@
                 _db = db;
             }
 
-            public async Task<Model> Handle(Query message)
+            public Task<Model> Handle(Query message)
             {
-                return await _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
+                return _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
             }
         }
     }
