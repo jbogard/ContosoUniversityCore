@@ -52,9 +52,10 @@
 
                 _currentTransaction?.Commit();
             }
-            catch (Exception)
+            catch
             {
                 RollbackTransaction();
+                throw;
             }
             finally
             {

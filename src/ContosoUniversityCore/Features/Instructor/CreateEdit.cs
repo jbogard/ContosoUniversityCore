@@ -147,62 +147,11 @@
                         .Where(i => i.Id == message.Id)
                         .SingleAsync();
                 }
-                instructor.FirstMidName = message.FirstMidName;
-                instructor.LastName = message.LastName;
-                instructor.HireDate = message.HireDate.GetValueOrDefault();
 
-                if (string.IsNullOrWhiteSpace(message.OfficeAssignmentLocation))
-                {
-                    instructor.OfficeAssignment = null;
-                }
-                else if (instructor.OfficeAssignment == null)
-                {
-                    instructor.OfficeAssignment = new OfficeAssignment
-                    {
-                        Location = message.OfficeAssignmentLocation
-                    };
-                }
-                else
-                {
-                    instructor.OfficeAssignment.Location = message.OfficeAssignmentLocation;
-                }
+                var courses = await _db.Courses.ToListAsync();
 
-                UpdateInstructorCourses(message.SelectedCourses, instructor);
-
+                instructor.Handle(message, courses);
             }
-
-            private void UpdateInstructorCourses(string[] selectedCourses, Instructor instructorToUpdate)
-            {
-                if (selectedCourses == null)
-                {
-                    instructorToUpdate.CourseInstructors = new List<CourseInstructor>();
-                    return;
-                }
-
-                var selectedCoursesHS = new HashSet<string>(selectedCourses);
-                var instructorCourses = new HashSet<int>
-                    (instructorToUpdate.CourseInstructors.Select(c => c.CourseID));
-
-                foreach (var course in _db.Courses)
-                {
-                    if (selectedCoursesHS.Contains(course.Id.ToString()))
-                    {
-                        if (!instructorCourses.Contains(course.Id))
-                        {
-                            instructorToUpdate.CourseInstructors.Add(new CourseInstructor { Course = course, Instructor = instructorToUpdate});
-                        }
-                    }
-                    else
-                    {
-                        if (instructorCourses.Contains(course.Id))
-                        {
-                            var toRemove = instructorToUpdate.CourseInstructors.Single(ci => ci.CourseID == course.Id);
-                            instructorToUpdate.CourseInstructors.Remove(toRemove);
-                        }
-                    }
-                }
-            }
-
         }
     }
 }

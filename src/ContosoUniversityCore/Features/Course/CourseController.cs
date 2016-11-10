@@ -20,13 +20,6 @@
             return View(model);
         }
 
-        public async Task<IActionResult> Details(Details.Query query)
-        {
-            var model = await _mediator.SendAsync(query);
-
-            return View(model);
-        }
-
         public ActionResult Create()
         {
             return View();
@@ -39,6 +32,13 @@
             _mediator.Send(command);
 
             return this.RedirectToActionJson(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(Details.Query query)
+        {
+            var model = await _mediator.SendAsync(query);
+
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(Edit.Query query)
