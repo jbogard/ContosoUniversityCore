@@ -1,6 +1,7 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
@@ -29,24 +30,25 @@
                 Credits = 4,
                 Id = 456
             };
-            var instructor1 = new Instructor
+
+            await fixture.InsertAsync(englishDept, english101, english201);
+
+            var instructor1Id = await fixture.SendAsync(new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment { Location = "Austin" },
                 FirstMidName = "George",
                 LastName = "Costanza",
+                SelectedCourses = new[] { english101.Id.ToString(), english201.Id.ToString() },
                 HireDate = DateTime.Today,
-            };
-            var instructor2 = new Instructor
+                OfficeAssignmentLocation = "Austin",
+            });
+
+            await fixture.SendAsync(new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment { Location = "Houston" },
+                OfficeAssignmentLocation = "Houston",
                 FirstMidName = "Jerry",
                 LastName = "Seinfeld",
                 HireDate = DateTime.Today,
-            };
-            instructor1.CourseInstructors.Add(new CourseInstructor { Course = english101, Instructor = instructor1 });
-            instructor1.CourseInstructors.Add(new CourseInstructor { Course = english201, Instructor = instructor1 });
-
-            await fixture.InsertAsync(englishDept, english101, english201, instructor1, instructor2);
+            });
 
             var student1 = new Student
             {
@@ -60,12 +62,15 @@
                 LastName = "Benes",
                 EnrollmentDate = DateTime.Today
             };
-            student1.Enrollments.Add(new Enrollment {Student = student1, Course = english101});
-            student2.Enrollments.Add(new Enrollment {Student = student2, Course = english101});
 
             await fixture.InsertAsync(student1, student2);
 
-            var result = await fixture.SendAsync(new Index.Query {Id = instructor1.Id, CourseID = english101.Id});
+            var enrollment1 = new Enrollment { StudentID = student1.Id, CourseID = english101.Id };
+            var enrollment2 = new Enrollment { StudentID = student2.Id, CourseID = english101.Id };
+
+            await fixture.InsertAsync(enrollment1, enrollment2);
+
+            var result = await fixture.SendAsync(new Index.Query { Id = instructor1Id, CourseID = english101.Id });
 
             result.ShouldNotBeNull();
 
@@ -74,7 +79,7 @@
 
             result.Courses.ShouldNotBeNull();
             result.Courses.Count.ShouldBe(2);
-            
+
             result.Enrollments.ShouldNotBeNull();
             result.Enrollments.Count.ShouldBe(2);
         }

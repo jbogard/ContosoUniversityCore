@@ -28,7 +28,7 @@
         }
 
 
-        public class Command : IAsyncRequest
+        public class Command : IAsyncRequest<int>
         {
             public Command()
             {
@@ -122,7 +122,7 @@
 
         }
 
-        public class CommandHandler : AsyncRequestHandler<Command>
+        public class CommandHandler : IAsyncRequestHandler<Command, int>
         {
             private readonly SchoolContext _db;
 
@@ -131,7 +131,7 @@
                 _db = db;
             }
 
-            protected override async Task HandleCore(Command message)
+            public async Task<int> Handle(Command message)
             {
                 Instructor instructor;
                 if (message.Id == null)
@@ -151,6 +151,10 @@
                 var courses = await _db.Courses.ToListAsync();
 
                 instructor.Handle(message, courses);
+
+                await _db.SaveChangesAsync();
+
+                return instructor.Id;
             }
         }
     }

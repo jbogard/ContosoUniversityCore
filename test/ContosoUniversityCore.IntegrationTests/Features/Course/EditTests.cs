@@ -12,12 +12,13 @@
     {
         public async Task Should_query_for_command(SliceFixture fixture)
         {
-            var admin = new Instructor
+            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
-            };
+            });
+            var admin = await fixture.FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -34,7 +35,7 @@
                 Id = 1234,
                 Title = "English 101"
             };
-            await fixture.InsertAsync(admin, dept, course);
+            await fixture.InsertAsync(dept, course);
 
             var result = await fixture.SendAsync(new Edit.Query { Id = course.Id });
 
@@ -46,12 +47,13 @@
 
         public async Task Should_edit(SliceFixture fixture)
         {
-            var admin = new Instructor
+            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
-            };
+            });
+            var admin = await fixture.FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -75,7 +77,7 @@
                 Id = 1234,
                 Title = "English 101"
             };
-            await fixture.InsertAsync(admin, dept, newDept, course);
+            await fixture.InsertAsync(dept, newDept, course);
 
             var command = new Edit.Command
             {

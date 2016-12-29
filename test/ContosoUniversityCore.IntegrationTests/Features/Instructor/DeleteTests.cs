@@ -1,6 +1,7 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Instructor;
@@ -23,38 +24,39 @@
                 Credits = 4,
                 Id = 123
             };
-            var instructor = new Instructor
+            var command = new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment { Location = "Austin" },
                 FirstMidName = "George",
                 LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
                 HireDate = DateTime.Today,
+                SelectedCourses = new []{ english101.Id.ToString()}
             };
-            instructor.CourseInstructors.Add(new CourseInstructor { Course = english101, Instructor = instructor });
+            var instructorId = await fixture.SendAsync(command);
 
-            await fixture.InsertAsync(englishDept, english101, instructor);
+            await fixture.InsertAsync(englishDept, english101);
 
-            var result = await fixture.SendAsync(new Delete.Query { Id = instructor.Id });
+            var result = await fixture.SendAsync(new Delete.Query { Id = instructorId });
 
             result.ShouldNotBeNull();
-            result.FirstMidName.ShouldBe(instructor.FirstMidName);
-            result.OfficeAssignmentLocation.ShouldBe(instructor.OfficeAssignment.Location);
+            result.FirstMidName.ShouldBe(command.FirstMidName);
+            result.OfficeAssignmentLocation.ShouldBe(command.OfficeAssignmentLocation);
         }
 
         public async Task Should_delete_instructor(SliceFixture fixture)
         {
-            var instructor = new Instructor
+            var instructorId = await fixture.SendAsync(new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment { Location = "Austin" },
                 FirstMidName = "George",
                 LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
                 HireDate = DateTime.Today,
-            };
+            });
             var englishDept = new Department
             {
                 Name = "English",
                 StartDate = DateTime.Today,
-                Administrator = instructor
+                InstructorID = instructorId
             };
             var english101 = new Course
             {
@@ -63,11 +65,20 @@
                 Credits = 4,
                 Id = 123
             };
-            instructor.CourseInstructors.Add(new CourseInstructor { Course = english101, Instructor = instructor });
 
-            await fixture.InsertAsync(instructor, englishDept, english101);
+            await fixture.InsertAsync(englishDept, english101);
 
-            await fixture.SendAsync(new Delete.Command { ID = instructor.Id });
+            await fixture.SendAsync(new CreateEdit.Command
+            {
+                Id = instructorId,
+                FirstMidName = "George",
+                LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
+                HireDate = DateTime.Today,
+                SelectedCourses = new[] { english101.Id.ToString() }
+            });
+
+            await fixture.SendAsync(new Delete.Command { ID = instructorId });
 
             var instructorCount = await fixture.ExecuteDbContextAsync(db => db.Instructors.CountAsync());
 

@@ -77,15 +77,16 @@
                 Credits = 4,
                 Id = 456
             };
-            var instructor = new Instructor
+
+            await fixture.InsertAsync(englishDept, english101, english201);
+
+            var instructorId = await fixture.SendAsync(new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment {Location = "Austin"},
                 FirstMidName = "George",
                 LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
                 HireDate = DateTime.Today,
-            };
-
-            await fixture.InsertAsync(englishDept, english101, english201, instructor);
+            });
 
             var command = new CreateEdit.Command
             {
@@ -94,12 +95,12 @@
                 HireDate = DateTime.Today,
                 OfficeAssignmentLocation = "Houston",
                 SelectedCourses = new string[0],
-                Id = instructor.Id
+                Id = instructorId
             };
 
             await fixture.SendAsync(command);
 
-            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructor.Id).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
+            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
 
             edited.FirstMidName.ShouldBe(command.FirstMidName);
             edited.LastName.ShouldBe(command.LastName);
@@ -129,16 +130,16 @@
                 Credits = 4,
                 Id = 456
             };
-            var instructor = new Instructor
+            await fixture.InsertAsync(englishDept, english101, english201);
+
+            var instructorId = await fixture.SendAsync(new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment {Location = "Austin"},
                 FirstMidName = "George",
                 LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
                 HireDate = DateTime.Today,
-            };
-            instructor.CourseInstructors.Add(new CourseInstructor {Course = english101, Instructor = instructor});
-
-            await fixture.InsertAsync(englishDept, english101, english201, instructor);
+                SelectedCourses = new[] { english101.Id.ToString() }
+            });
 
             var command = new CreateEdit.Command
             {
@@ -147,12 +148,12 @@
                 HireDate = DateTime.Today,
                 OfficeAssignmentLocation = "Houston",
                 SelectedCourses = new[] { english201.Id.ToString() },
-                Id = instructor.Id
+                Id = instructorId
             };
 
             await fixture.SendAsync(command);
 
-            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructor.Id).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
+            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
 
             edited.FirstMidName.ShouldBe(command.FirstMidName);
             edited.LastName.ShouldBe(command.LastName);

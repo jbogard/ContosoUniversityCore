@@ -1,6 +1,7 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
@@ -22,22 +23,23 @@
                 Credits = 4,
                 Id = 123
             };
-            var instructor = new Instructor
+            await fixture.InsertAsync(englishDept, english101);
+
+            var command = new CreateEdit.Command
             {
-                OfficeAssignment = new OfficeAssignment { Location = "Austin" },
                 FirstMidName = "George",
                 LastName = "Costanza",
+                OfficeAssignmentLocation = "Austin",
                 HireDate = DateTime.Today,
+                SelectedCourses = new[] { english101.Id.ToString() }
             };
-            instructor.CourseInstructors.Add(new CourseInstructor { Course = english101, Instructor = instructor });
+            var instructorId = await fixture.SendAsync(command);
 
-            await fixture.InsertAsync(englishDept, english101, instructor);
-
-            var result = await fixture.SendAsync(new Details.Query { Id = instructor.Id });
+            var result = await fixture.SendAsync(new Details.Query { Id = instructorId });
 
             result.ShouldNotBeNull();
-            result.FirstMidName.ShouldBe(instructor.FirstMidName);
-            result.OfficeAssignmentLocation.ShouldBe(instructor.OfficeAssignment.Location);
+            result.FirstMidName.ShouldBe(command.FirstMidName);
+            result.OfficeAssignmentLocation.ShouldBe(command.OfficeAssignmentLocation);
         }
     }
 }

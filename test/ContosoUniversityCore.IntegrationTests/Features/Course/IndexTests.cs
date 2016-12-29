@@ -10,12 +10,13 @@
     {
         public async Task Should_return_all_courses(SliceFixture fixture)
         {
-            var admin = new Instructor
+            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
-            };
+            });
+            var admin = await fixture.FindAsync<Instructor>(adminId);
 
             var englishDept = new Department
             {
@@ -46,7 +47,7 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(admin, englishDept, historyDept, english, history);
+            await fixture.InsertAsync(englishDept, historyDept, english, history);
 
             var result = await fixture.SendAsync(new Index.Query());
 
@@ -56,12 +57,13 @@
 
         public async Task Should_filter_courses(SliceFixture fixture)
         {
-            var admin = new Instructor
+            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
-            };
+            });
+            var admin = await fixture.FindAsync<Instructor>(adminId);
 
             var englishDept = new Department
             {
@@ -92,7 +94,7 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(admin, englishDept, historyDept, english, history);
+            await fixture.InsertAsync(englishDept, historyDept, english, history);
 
             var result = await fixture.SendAsync(new Index.Query {SelectedDepartment = englishDept});
 

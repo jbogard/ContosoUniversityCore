@@ -72,7 +72,8 @@
                     .Where(i => i.Id == message.ID)
                     .SingleAsync();
 
-                instructor.OfficeAssignment = null;
+                instructor.Handle(message);
+
                 _db.Instructors.Remove(instructor);
 
                 var department = await _db.Departments

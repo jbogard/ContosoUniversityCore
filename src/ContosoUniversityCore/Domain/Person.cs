@@ -21,12 +21,6 @@ namespace ContosoUniversityCore.Domain
 
         [Display(Name = "Full Name")]
         [Computed]
-        public string FullName
-        {
-            get
-            {
-                return LastName + ", " + FirstMidName;
-            }
-        }
+        public string FullName => LastName + ", " + FirstMidName;
     }
 }

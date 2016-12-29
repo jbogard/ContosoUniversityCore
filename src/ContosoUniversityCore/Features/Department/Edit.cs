@@ -71,6 +71,7 @@
             protected override async Task HandleCore(Command message)
             {
                 var dept = await _db.Departments.FindAsync(message.Id);
+                message.Administrator = await _db.Instructors.FindAsync(message.Administrator.Id);
 
                 Mapper.Map(message, dept);
             }

@@ -12,6 +12,6 @@ namespace ContosoUniversityCore.Domain
         [Display(Name = "Enrollment Date")]
         public DateTime EnrollmentDate { get; set; }
 
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
+        public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

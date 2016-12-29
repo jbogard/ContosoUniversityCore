@@ -12,12 +12,13 @@
     {
         public async Task Should_create_new_course(SliceFixture fixture)
         {
-            var admin = new Instructor
+            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
-            };
+            });
+            var admin = await fixture.FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -27,7 +28,7 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(admin, dept);
+            await fixture.InsertAsync(dept);
 
             var command = new Create.Command
             {
