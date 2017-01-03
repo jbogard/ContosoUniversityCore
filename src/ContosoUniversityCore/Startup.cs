@@ -52,11 +52,11 @@
                 })
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper();
 
             Mapper.AssertConfigurationIsValid();
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR();
             services.AddScoped(_ => new SchoolContext(Configuration["Data:DefaultConnection:ConnectionString"]));
             services.AddHtmlTags(new TagConventions());
         }

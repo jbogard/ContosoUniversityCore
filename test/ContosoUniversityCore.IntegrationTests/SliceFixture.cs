@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Domain;
     using FakeItEasy;
@@ -25,6 +26,8 @@
 
             A.CallTo(() => host.ContentRootPath).Returns(Directory.GetCurrentDirectory());
 
+            FixEntryAssembly();
+
             var startup = new Startup(host);
             _configuration = startup.Configuration;
             var services = new ServiceCollection();
@@ -32,6 +35,20 @@
             var provider = services.BuildServiceProvider();
             _scopeFactory = provider.GetService<IServiceScopeFactory>();
             _checkpoint = new Checkpoint();
+        }
+
+        private static void FixEntryAssembly()
+        {
+// Ugh. http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
+            AppDomainManager manager = new AppDomainManager();
+            FieldInfo entryAssemblyfield = manager.GetType()
+                .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
+            entryAssemblyfield?.SetValue(manager, typeof(Startup).Assembly);
+
+            AppDomain domain = AppDomain.CurrentDomain;
+            FieldInfo domainManagerField = domain.GetType()
+                .GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
+            domainManagerField?.SetValue(domain, manager);
         }
 
         public static void ResetCheckpoint()
