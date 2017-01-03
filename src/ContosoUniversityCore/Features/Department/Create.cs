@@ -38,7 +38,7 @@
             public Instructor Administrator { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command>
+        public class CommandHandler : IRequestHandler<Command>
         {
             private readonly SchoolContext _context;
 
@@ -47,7 +47,7 @@
                 _context = context;
             }
 
-            protected override void HandleCore(Command message)
+            public void Handle(Command message)
             {
                 var department = Mapper.Map<Command, Department>(message);
 

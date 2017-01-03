@@ -11,12 +11,12 @@
 
     public class Edit
     {
-        public class Query : IAsyncRequest<Command>
+        public class Query : IRequest<Command>
         {
             public int Id { get; set; }
         }
 
-        public class Command : IAsyncRequest
+        public class Command : IRequest
         {
             public string Name { get; set; }
 
@@ -59,7 +59,7 @@
             }
         }
 
-        public class CommandHandler : AsyncRequestHandler<Command>
+        public class CommandHandler : IAsyncRequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -68,7 +68,7 @@
                 _db = db;
             }
 
-            protected override async Task HandleCore(Command message)
+            public async Task Handle(Command message)
             {
                 var dept = await _db.Departments.FindAsync(message.Id);
                 message.Administrator = await _db.Instructors.FindAsync(message.Administrator.Id);

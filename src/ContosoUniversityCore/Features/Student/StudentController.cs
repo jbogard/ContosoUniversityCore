@@ -15,14 +15,14 @@
 
         public async Task<ViewResult> Index(Index.Query query)
         {
-            var model = await _mediator.SendAsync(query);
+            var model = await _mediator.Send(query);
 
             return View(model);
         }
 
         public async Task<IActionResult> Details(Details.Query query)
         {
-            var model = await _mediator.SendAsync(query);
+            var model = await _mediator.Send(query);
 
             return View(model);
         }
@@ -34,9 +34,9 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Create.Command command)
+        public async Task<IActionResult> Create(Create.Command command)
         {
-            _mediator.Send(command);
+            await _mediator.Send(command);
 
             return this.RedirectToActionJson(nameof(Index));
         }
@@ -44,7 +44,7 @@
 
         public async Task<IActionResult> Edit(Edit.Query query)
         {
-            var model = await _mediator.SendAsync(query);
+            var model = await _mediator.Send(query);
 
             return View(model);
         }
@@ -53,14 +53,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Edit.Command command)
         {
-            await _mediator.SendAsync(command);
+            await _mediator.Send(command);
 
             return this.RedirectToActionJson(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(Delete.Query query)
         {
-            var model = await _mediator.SendAsync(query);
+            var model = await _mediator.Send(query);
 
             return View(model);
         }
@@ -69,7 +69,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Delete.Command command)
         {
-            await _mediator.SendAsync(command);
+            await _mediator.Send(command);
 
             return this.RedirectToActionJson(nameof(Index));
         }

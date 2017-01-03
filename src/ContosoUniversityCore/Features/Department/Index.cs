@@ -10,7 +10,7 @@
 
     public class Index
     {
-        public class Query : IAsyncRequest<List<Model>>
+        public class Query : IRequest<List<Model>>
         {
         }
 

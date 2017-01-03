@@ -10,7 +10,7 @@
 
     public class Index
     {
-        public class Query : IAsyncRequest<Result>
+        public class Query : IRequest<Result>
         {
             public Department SelectedDepartment { get; set; }
         }

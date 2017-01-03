@@ -14,7 +14,7 @@
 
     public class CreateEdit
     {
-        public class Query : IAsyncRequest<Command>
+        public class Query : IRequest<Command>
         {
             public int? Id { get; set; }
         }
@@ -28,7 +28,7 @@
         }
 
 
-        public class Command : IAsyncRequest<int>
+        public class Command : IRequest<int>
         {
             public Command()
             {

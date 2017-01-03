@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyModel;
     using Respawn;
 
     public class SliceFixture
@@ -112,25 +113,23 @@
             return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
         }
 
-        public Task<TResponse> SendAsync<TResponse>(IAsyncRequest<TResponse> request)
-        {
-            return ExecuteScopeAsync(sp =>
-            {
-                var mediator = sp.GetService<IMediator>();
-
-                return mediator.SendAsync(request);
-            });
-        }
-
         public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
             return ExecuteScopeAsync(sp =>
             {
                 var mediator = sp.GetService<IMediator>();
 
-                var response = mediator.Send(request);
+                return mediator.Send(request);
+            });
+        }
 
-                return Task.FromResult(response);
+        public Task SendAsync(IRequest request)
+        {
+            return ExecuteScopeAsync(sp =>
+            {
+                var mediator = sp.GetService<IMediator>();
+
+                return mediator.Send(request);
             });
         }
     }

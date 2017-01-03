@@ -12,7 +12,7 @@
 
     public class Index
     {
-        public class Query : IAsyncRequest<Model>
+        public class Query : IRequest<Model>
         {
             public int? Id { get; set; }
             public int? CourseID { get; set; }

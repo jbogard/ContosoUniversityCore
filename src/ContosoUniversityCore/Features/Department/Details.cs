@@ -8,7 +8,7 @@
 
     public class Details
     {
-        public class Query : IAsyncRequest<Model>
+        public class Query : IRequest<Model>
         {
             public int Id { get; set; }
         }

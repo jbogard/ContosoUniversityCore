@@ -10,7 +10,7 @@
 
     public class Delete
     {
-        public class Query : IAsyncRequest<Command>
+        public class Query : IRequest<Command>
         {
             public int? Id { get; set; }
         }
@@ -32,13 +32,13 @@
                 _db = db;
             }
 
-            public async Task<Command> Handle(Query message)
+            public Task<Command> Handle(Query message)
             {
-                return await _db.Courses.Where(c => c.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
+                return _db.Courses.Where(c => c.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
-        public class Command : IAsyncRequest
+        public class Command : IRequest
         {
             [Display(Name = "Number")]
             public int Id { get; set; }
@@ -47,7 +47,7 @@
             public string DepartmentName { get; set; }
         }
 
-        public class CommandHandler : AsyncRequestHandler<Command>
+        public class CommandHandler : IAsyncRequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -56,7 +56,7 @@
                 _db = db;
             }
 
-            protected override async Task HandleCore(Command message)
+            public async Task Handle(Command message)
             {
                 var course = await _db.Courses.FindAsync(message.Id);
 

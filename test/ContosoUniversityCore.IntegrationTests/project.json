@@ -4,7 +4,8 @@
     "debugType": "portable",
     "copyToOutput": {
       "include": [ "appsettings.json" ]
-    }
+    },
+    "preserveCompilationContext": true
   },
   "dependencies": {
     "Fixie": "2.0.0-alpha-0001",
