@@ -39,7 +39,7 @@
 
         private static void FixEntryAssembly()
         {
-// Ugh. http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
+            // http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
             AppDomainManager manager = new AppDomainManager();
             FieldInfo entryAssemblyfield = manager.GetType()
                 .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);

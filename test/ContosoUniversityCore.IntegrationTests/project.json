@@ -11,16 +11,14 @@
     "Fixie": "2.0.0-alpha-0001",
     "ContosoUniversityCore": { "target": "project" },
     "Shouldly": "2.8.2",
-    "Respawn": "0.1.0",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0",
-    "FakeItEasy": "2.3.0"
+    "Respawn": "0.2.0",
+    "Microsoft.Extensions.DependencyInjection": "1.1.0",
+    "FakeItEasy": "2.3.0",
+    "Microsoft.NETCore.Platforms": "1.1.0"
   },
   "testRunner": "fixie",
   "frameworks": {
     "net452": {
-      "dependencies": {
-        "Microsoft.NETCore.Platforms": "1.0.1"
-      }
     }
   }
 }

@@ -39,11 +39,6 @@
                 })
                 .AddRazorOptions(options =>
                 {
-                    // {0} - Action Name
-                    // {1} - Controller Name
-                    // {2} - Area Name
-                    // {3} - Feature Name
-                    // Replace normal view location entirely
                     options.ViewLocationFormats.Clear();
                     options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
                     options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
