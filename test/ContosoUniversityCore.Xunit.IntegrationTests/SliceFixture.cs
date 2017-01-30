@@ -1,4 +1,4 @@
-﻿namespace ContosoUniversityCore.IntegrationTests
+﻿namespace ContosoUniversityCore.Xunit.IntegrationTests
 {
     using System;
     using System.IO;
@@ -11,7 +11,6 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyModel;
     using Respawn;
 
     public class SliceFixture
@@ -37,24 +36,24 @@
             _checkpoint = new Checkpoint();
         }
 
+
         private static void FixEntryAssembly()
         {
             // http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
-            AppDomainManager manager = new AppDomainManager();
-            FieldInfo entryAssemblyfield = manager.GetType()
+            var manager = new AppDomainManager();
+            var entryAssemblyfield = manager.GetType()
                 .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
             entryAssemblyfield?.SetValue(manager, typeof(Startup).Assembly);
 
-            AppDomain domain = AppDomain.CurrentDomain;
-            FieldInfo domainManagerField = domain.GetType()
+            var domain = AppDomain.CurrentDomain;
+            var domainManagerField = domain.GetType()
                 .GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
             domainManagerField?.SetValue(domain, manager);
         }
 
         public static void ResetCheckpoint()
         {
-
-            string test = _configuration["Data:DefaultConnection:ConnectionString"];
+            var test = _configuration["Data:DefaultConnection:ConnectionString"];
             _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
         }
 
@@ -114,22 +113,14 @@
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public Task InsertAsync(params IEntity[] entities)
+        public Task SendAsync(IRequest request)
         {
-            return ExecuteDbContextAsync(db =>
+            return ExecuteScopeAsync(sp =>
             {
-                foreach (var entity in entities)
-                {
-                    db.Set(entity.GetType()).Add(entity);
-                }
-                return db.SaveChangesAsync();
-            });
-        }
+                var mediator = sp.GetService<IMediator>();
 
-        public Task<T> FindAsync<T>(int id)
-            where T : class, IEntity
-        {
-            return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
+                return mediator.Send(request);
+            });
         }
 
         public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -142,13 +133,21 @@
             });
         }
 
-        public Task SendAsync(IRequest request)
+        public Task<T> FindAsync<T>(int id)
+            where T : class, IEntity
         {
-            return ExecuteScopeAsync(sp =>
-            {
-                var mediator = sp.GetService<IMediator>();
+            return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
+        }
 
-                return mediator.Send(request);
+        public Task InsertAsync(params IEntity[] entities)
+        {
+            return ExecuteDbContextAsync(db =>
+            {
+                foreach (var entity in entities)
+                {
+                    db.Set(entity.GetType()).Add(entity);
+                }
+                return db.SaveChangesAsync();
             });
         }
     }
