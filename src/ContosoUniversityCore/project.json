@@ -27,6 +27,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
+    "OdeToCode.AddFeatureFolders": "1.0.4",
     "X.PagedList": "5.3.0.5300"
   },
 
