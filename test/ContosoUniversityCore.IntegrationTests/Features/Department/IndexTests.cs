@@ -5,18 +5,19 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class IndexTests
     {
-        public async Task Should_list_departments(SliceFixture fixture)
+        public async Task Should_list_departments()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -33,11 +34,11 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(dept, dept2);
+            await InsertAsync(dept, dept2);
 
             var query = new Index.Query();
 
-            var result = await fixture.SendAsync(query);
+            var result = await SendAsync(query);
 
             result.ShouldNotBeNull();
             result.Count.ShouldBe(2);

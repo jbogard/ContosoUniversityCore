@@ -5,18 +5,19 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class DetailsTests
     {
-        public async Task Should_query_for_details(SliceFixture fixture)
+        public async Task Should_query_for_details()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -34,9 +35,9 @@
                 Title = "English 101"
             };
 
-            await fixture.InsertAsync(dept, course);
+            await InsertAsync(dept, course);
 
-            var result = await fixture.SendAsync(new Details.Query { Id = course.Id });
+            var result = await SendAsync(new Details.Query { Id = course.Id });
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);

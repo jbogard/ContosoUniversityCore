@@ -7,18 +7,19 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class CreateTests
     {
-        public async Task Should_create_new_course(SliceFixture fixture)
+        public async Task Should_create_new_course()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -28,7 +29,7 @@
                 StartDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(dept);
+            await InsertAsync(dept);
 
             var command = new Create.Command
             {
@@ -37,9 +38,9 @@
                 Number = 1234,
                 Title = "English 101"
             };
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var created = await fixture.ExecuteDbContextAsync(db => db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync());
+            var created = await ExecuteDbContextAsync(db => db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync());
 
             created.ShouldNotBeNull();
             created.DepartmentID.ShouldBe(dept.Id);

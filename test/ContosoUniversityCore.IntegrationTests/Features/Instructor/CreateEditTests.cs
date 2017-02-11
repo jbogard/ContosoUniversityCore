@@ -8,10 +8,11 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class CreateEditTests
     {
-        public async Task Should_create_new_instructor(SliceFixture fixture)
+        public async Task Should_create_new_instructor()
         {
             var englishDept = new Department
             {
@@ -33,7 +34,7 @@
                 Id = 456
             };
 
-            await fixture.InsertAsync(englishDept, english101, english201);
+            await InsertAsync(englishDept, english101, english201);
 
             var command = new CreateEdit.Command
             {
@@ -44,9 +45,9 @@
                 SelectedCourses = new [] {english101.Id.ToString(), english201.Id.ToString()}
             };
 
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var created = await fixture.ExecuteDbContextAsync(db => db.Instructors.Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
+            var created = await ExecuteDbContextAsync(db => db.Instructors.Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
 
             created.FirstMidName.ShouldBe(command.FirstMidName);
             created.LastName.ShouldBe(command.LastName);
@@ -56,7 +57,7 @@
             created.CourseInstructors.Count.ShouldBe(2);
         }
 
-        public async Task Should_edit_instructor_details(SliceFixture fixture)
+        public async Task Should_edit_instructor_details()
         {
             var englishDept = new Department
             {
@@ -78,9 +79,9 @@
                 Id = 456
             };
 
-            await fixture.InsertAsync(englishDept, english101, english201);
+            await InsertAsync(englishDept, english101, english201);
 
-            var instructorId = await fixture.SendAsync(new CreateEdit.Command
+            var instructorId = await SendAsync(new CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
@@ -98,9 +99,9 @@
                 Id = instructorId
             };
 
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
+            var edited = await ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
 
             edited.FirstMidName.ShouldBe(command.FirstMidName);
             edited.LastName.ShouldBe(command.LastName);
@@ -109,7 +110,7 @@
             edited.OfficeAssignment.Location.ShouldBe(command.OfficeAssignmentLocation);
         }
 
-        public async Task Should_merge_course_instructors(SliceFixture fixture)
+        public async Task Should_merge_course_instructors()
         {
             var englishDept = new Department
             {
@@ -130,9 +131,9 @@
                 Credits = 4,
                 Id = 456
             };
-            await fixture.InsertAsync(englishDept, english101, english201);
+            await InsertAsync(englishDept, english101, english201);
 
-            var instructorId = await fixture.SendAsync(new CreateEdit.Command
+            var instructorId = await SendAsync(new CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
@@ -151,9 +152,9 @@
                 Id = instructorId
             };
 
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var edited = await fixture.ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
+            var edited = await ExecuteDbContextAsync(db => db.Instructors.Where(i => i.Id == instructorId).Include(i => i.CourseInstructors).Include(i => i.OfficeAssignment).SingleOrDefaultAsync());
 
             edited.FirstMidName.ShouldBe(command.FirstMidName);
             edited.LastName.ShouldBe(command.LastName);
