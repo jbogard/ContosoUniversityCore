@@ -7,18 +7,19 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class CreateTests
     {
-        public async Task Should_create_new_department(SliceFixture fixture)
+        public async Task Should_create_new_department()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var command = new Create.Command
             {
@@ -28,9 +29,9 @@
                 Administrator = admin
             };
 
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var created = await fixture.ExecuteDbContextAsync(db => db.Departments.Where(d => d.Name == command.Name).SingleOrDefaultAsync());
+            var created = await ExecuteDbContextAsync(db => db.Departments.Where(d => d.Name == command.Name).SingleOrDefaultAsync());
 
             created.ShouldNotBeNull();
             created.Budget.ShouldBe(command.Budget.GetValueOrDefault());

@@ -6,10 +6,11 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class IndexTests
     {
-        public async Task Should_get_list_instructor_with_details(SliceFixture fixture)
+        public async Task Should_get_list_instructor_with_details()
         {
             var englishDept = new Department
             {
@@ -31,9 +32,9 @@
                 Id = 456
             };
 
-            await fixture.InsertAsync(englishDept, english101, english201);
+            await InsertAsync(englishDept, english101, english201);
 
-            var instructor1Id = await fixture.SendAsync(new CreateEdit.Command
+            var instructor1Id = await SendAsync(new CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
@@ -42,7 +43,7 @@
                 OfficeAssignmentLocation = "Austin",
             });
 
-            await fixture.SendAsync(new CreateEdit.Command
+            await SendAsync(new CreateEdit.Command
             {
                 OfficeAssignmentLocation = "Houston",
                 FirstMidName = "Jerry",
@@ -63,14 +64,14 @@
                 EnrollmentDate = DateTime.Today
             };
 
-            await fixture.InsertAsync(student1, student2);
+            await InsertAsync(student1, student2);
 
             var enrollment1 = new Enrollment { StudentID = student1.Id, CourseID = english101.Id };
             var enrollment2 = new Enrollment { StudentID = student2.Id, CourseID = english101.Id };
 
-            await fixture.InsertAsync(enrollment1, enrollment2);
+            await InsertAsync(enrollment1, enrollment2);
 
-            var result = await fixture.SendAsync(new Index.Query { Id = instructor1Id, CourseID = english101.Id });
+            var result = await SendAsync(new Index.Query { Id = instructor1Id, CourseID = english101.Id });
 
             result.ShouldNotBeNull();
 

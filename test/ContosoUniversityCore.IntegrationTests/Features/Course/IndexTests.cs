@@ -5,18 +5,19 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class IndexTests
     {
-        public async Task Should_return_all_courses(SliceFixture fixture)
+        public async Task Should_return_all_courses()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var englishDept = new Department
             {
@@ -47,23 +48,23 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(englishDept, historyDept, english, history);
+            await InsertAsync(englishDept, historyDept, english, history);
 
-            var result = await fixture.SendAsync(new Index.Query());
+            var result = await SendAsync(new Index.Query());
 
             result.ShouldNotBeNull();
             result.Courses.Count.ShouldBe(2);
         }
 
-        public async Task Should_filter_courses(SliceFixture fixture)
+        public async Task Should_filter_courses()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var englishDept = new Department
             {
@@ -94,9 +95,9 @@
                 Id = 4312,
                 Title = "History 101"
             };
-            await fixture.InsertAsync(englishDept, historyDept, english, history);
+            await InsertAsync(englishDept, historyDept, english, history);
 
-            var result = await fixture.SendAsync(new Index.Query {SelectedDepartment = englishDept});
+            var result = await SendAsync(new Index.Query {SelectedDepartment = englishDept});
 
             result.ShouldNotBeNull();
             result.Courses.Count.ShouldBe(1);

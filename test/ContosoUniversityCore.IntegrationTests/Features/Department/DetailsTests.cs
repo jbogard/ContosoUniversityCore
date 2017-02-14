@@ -6,18 +6,19 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class DetailsTests
     {
-        public async Task Should_get_department_details(SliceFixture fixture)
+        public async Task Should_get_department_details()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -26,14 +27,14 @@
                 Budget = 123m,
                 StartDate = DateTime.Today
             };
-            await fixture.InsertAsync(dept);
+            await InsertAsync(dept);
 
             var query = new Details.Query
             {
                 Id = dept.Id
             };
 
-            var result = await fixture.SendAsync(query);
+            var result = await SendAsync(query);
 
             result.ShouldNotBeNull();
             result.Name.ShouldBe(dept.Name);

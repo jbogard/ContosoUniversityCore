@@ -56,7 +56,7 @@
             _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
         }
 
-        public async Task ExecuteScopeAsync(Func<IServiceProvider, Task> action)
+        public static async Task ExecuteScopeAsync(Func<IServiceProvider, Task> action)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -78,7 +78,7 @@
             }
         }
 
-        public async Task<T> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T>> action)
+        public static async Task<T> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T>> action)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -102,17 +102,17 @@
             }
         }
 
-        public Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
+        public static Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public Task<T> ExecuteDbContextAsync<T>(Func<SchoolContext, Task<T>> action)
+        public static Task<T> ExecuteDbContextAsync<T>(Func<SchoolContext, Task<T>> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public Task InsertAsync(params IEntity[] entities)
+        public static Task InsertAsync(params IEntity[] entities)
         {
             return ExecuteDbContextAsync(db =>
             {
@@ -124,13 +124,13 @@
             });
         }
 
-        public Task<T> FindAsync<T>(int id)
+        public static Task<T> FindAsync<T>(int id)
             where T : class, IEntity
         {
             return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
         }
 
-        public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+        public static Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
         {
             return ExecuteScopeAsync(sp =>
             {
@@ -140,7 +140,7 @@
             });
         }
 
-        public Task SendAsync(IRequest request)
+        public static Task SendAsync(IRequest request)
         {
             return ExecuteScopeAsync(sp =>
             {

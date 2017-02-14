@@ -6,10 +6,11 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using static SliceFixture;
 
     public class DetailsTests
     {
-        public async Task Should_get_instructor_details(SliceFixture fixture)
+        public async Task Should_get_instructor_details()
         {
             var englishDept = new Department
             {
@@ -23,7 +24,7 @@
                 Credits = 4,
                 Id = 123
             };
-            await fixture.InsertAsync(englishDept, english101);
+            await InsertAsync(englishDept, english101);
 
             var command = new CreateEdit.Command
             {
@@ -33,9 +34,9 @@
                 HireDate = DateTime.Today,
                 SelectedCourses = new[] { english101.Id.ToString() }
             };
-            var instructorId = await fixture.SendAsync(command);
+            var instructorId = await SendAsync(command);
 
-            var result = await fixture.SendAsync(new Details.Query { Id = instructorId });
+            var result = await SendAsync(new Details.Query { Id = instructorId });
 
             result.ShouldNotBeNull();
             result.FirstMidName.ShouldBe(command.FirstMidName);

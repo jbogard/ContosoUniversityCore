@@ -7,18 +7,19 @@
     using Shouldly;
     using System.Linq;
     using System.Data.Entity;
+    using static SliceFixture;
 
     public class EditTests
     {
-        public async Task Should_query_for_command(SliceFixture fixture)
+        public async Task Should_query_for_command()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -35,9 +36,9 @@
                 Id = 1234,
                 Title = "English 101"
             };
-            await fixture.InsertAsync(dept, course);
+            await InsertAsync(dept, course);
 
-            var result = await fixture.SendAsync(new Edit.Query { Id = course.Id });
+            var result = await SendAsync(new Edit.Query { Id = course.Id });
 
             result.ShouldNotBeNull();
             result.Credits.ShouldBe(course.Credits);
@@ -45,15 +46,15 @@
             result.Title.ShouldBe(course.Title);
         }
 
-        public async Task Should_edit(SliceFixture fixture)
+        public async Task Should_edit()
         {
-            var adminId = await fixture.SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
+            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
             {
                 FirstMidName = "George",
                 LastName = "Costanza",
                 HireDate = DateTime.Today,
             });
-            var admin = await fixture.FindAsync<Instructor>(adminId);
+            var admin = await FindAsync<Instructor>(adminId);
 
             var dept = new Department
             {
@@ -77,7 +78,7 @@
                 Id = 1234,
                 Title = "English 101"
             };
-            await fixture.InsertAsync(dept, newDept, course);
+            await InsertAsync(dept, newDept, course);
 
             var command = new Edit.Command
             {
@@ -86,9 +87,9 @@
                 Department = newDept,
                 Title = "English 202"
             };
-            await fixture.SendAsync(command);
+            await SendAsync(command);
 
-            var edited = await fixture.FindAsync<Course>(course.Id);
+            var edited = await FindAsync<Course>(course.Id);
 
             edited.ShouldNotBeNull();
             edited.DepartmentID.ShouldBe(newDept.Id);
