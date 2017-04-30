@@ -1,4 +1,4 @@
-﻿namespace ContosoUniversityCore.IntegrationTests
+﻿namespace ContosoUniversityCore.Xunit.IntegrationTests
 {
     using System;
     using System.IO;
@@ -11,7 +11,6 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyModel;
     using Respawn;
 
     public class SliceFixture
@@ -37,28 +36,28 @@
             _checkpoint = new Checkpoint();
         }
 
+
         private static void FixEntryAssembly()
         {
             // http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
-            AppDomainManager manager = new AppDomainManager();
-            FieldInfo entryAssemblyfield = manager.GetType()
+            var manager = new AppDomainManager();
+            var entryAssemblyfield = manager.GetType()
                 .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
             entryAssemblyfield?.SetValue(manager, typeof(Startup).Assembly);
 
-            AppDomain domain = AppDomain.CurrentDomain;
-            FieldInfo domainManagerField = domain.GetType()
+            var domain = AppDomain.CurrentDomain;
+            var domainManagerField = domain.GetType()
                 .GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
             domainManagerField?.SetValue(domain, manager);
         }
 
         public static void ResetCheckpoint()
         {
-
-            string test = _configuration["Data:DefaultConnection:ConnectionString"];
+            var test = _configuration["Data:DefaultConnection:ConnectionString"];
             _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
         }
 
-        public static async Task ExecuteScopeAsync(Func<IServiceProvider, Task> action)
+        public async Task ExecuteScopeAsync(Func<IServiceProvider, Task> action)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -80,7 +79,7 @@
             }
         }
 
-        public static async Task<T> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T>> action)
+        public async Task<T> ExecuteScopeAsync<T>(Func<IServiceProvider, Task<T>> action)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -104,17 +103,43 @@
             }
         }
 
-        public static Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
+        public Task ExecuteDbContextAsync(Func<SchoolContext, Task> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public static Task<T> ExecuteDbContextAsync<T>(Func<SchoolContext, Task<T>> action)
+        public Task<T> ExecuteDbContextAsync<T>(Func<SchoolContext, Task<T>> action)
         {
             return ExecuteScopeAsync(sp => action(sp.GetService<SchoolContext>()));
         }
 
-        public static Task InsertAsync(params IEntity[] entities)
+        public Task SendAsync(IRequest request)
+        {
+            return ExecuteScopeAsync(sp =>
+            {
+                var mediator = sp.GetService<IMediator>();
+
+                return mediator.Send(request);
+            });
+        }
+
+        public Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+        {
+            return ExecuteScopeAsync(sp =>
+            {
+                var mediator = sp.GetService<IMediator>();
+
+                return mediator.Send(request);
+            });
+        }
+
+        public Task<T> FindAsync<T>(int id)
+            where T : class, IEntity
+        {
+            return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
+        }
+
+        public Task InsertAsync(params IEntity[] entities)
         {
             return ExecuteDbContextAsync(db =>
             {
@@ -123,32 +148,6 @@
                     db.Set(entity.GetType()).Add(entity);
                 }
                 return db.SaveChangesAsync();
-            });
-        }
-
-        public static Task<T> FindAsync<T>(int id)
-            where T : class, IEntity
-        {
-            return ExecuteDbContextAsync(db => db.Set<T>().FindAsync(id));
-        }
-
-        public static Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
-        {
-            return ExecuteScopeAsync(sp =>
-            {
-                var mediator = sp.GetService<IMediator>();
-
-                return mediator.Send(request);
-            });
-        }
-
-        public static Task SendAsync(IRequest request)
-        {
-            return ExecuteScopeAsync(sp =>
-            {
-                var mediator = sp.GetService<IMediator>();
-
-                return mediator.Send(request);
             });
         }
     }

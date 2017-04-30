@@ -1,0 +1,29 @@
+﻿{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "buildOptions": {
+    "debugType": "portable",
+    "copyToOutput": {
+      "include": [ "appsettings.json", "xunit.runner.json" ]
+
+    },
+    "preserveCompilationContext": true
+  },
+  "dependencies": {
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "ContosoUniversityCore": "1.0.0-*",
+    "Shouldly": "2.8.2",
+    "Microsoft.Extensions.DependencyInjection": "1.1.0",
+    "Microsoft.DotNet.InternalAbstractions": "1.0.0",
+    "FakeItEasy": "2.3.0",
+    "Respawn": "0.2.0"
+  },
+  "frameworks": {
+    "net452": {
+      "dependencies": {
+        "Microsoft.NETCore.Platforms": "1.1.0"
+      }
+    }
+  }
+}
