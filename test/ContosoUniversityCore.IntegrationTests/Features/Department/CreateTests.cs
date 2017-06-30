@@ -7,10 +7,12 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class CreateTests
+    public class CreateTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_create_new_department()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

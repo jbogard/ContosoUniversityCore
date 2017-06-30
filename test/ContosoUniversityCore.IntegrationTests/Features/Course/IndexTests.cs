@@ -5,10 +5,12 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class IndexTests
+    public class IndexTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_return_all_courses()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
@@ -56,6 +58,7 @@
             result.Courses.Count.ShouldBe(2);
         }
 
+        [Fact]
         public async Task Should_filter_courses()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

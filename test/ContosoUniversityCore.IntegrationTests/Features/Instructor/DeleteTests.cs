@@ -7,10 +7,12 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class DeleteTests
+    public class DeleteTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_query_for_command()
         {
             var englishDept = new Department

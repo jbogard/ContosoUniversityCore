@@ -8,10 +8,12 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class CreateEditTests
+    public class CreateEditTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_create_new_instructor()
         {
             var englishDept = new Department

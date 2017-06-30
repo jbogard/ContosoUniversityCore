@@ -6,10 +6,12 @@
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class IndexTests
+    public class IndexTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_get_list_instructor_with_details()
         {
             var englishDept = new Department

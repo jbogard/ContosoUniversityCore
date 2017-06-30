@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Reflection;
     using System.Threading.Tasks;
     using Domain;
     using FakeItEasy;
@@ -11,7 +10,6 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyModel;
     using Respawn;
 
     public class SliceFixture
@@ -26,7 +24,7 @@
 
             A.CallTo(() => host.ContentRootPath).Returns(Directory.GetCurrentDirectory());
 
-            FixEntryAssembly();
+            //FixEntryAssembly();
 
             var startup = new Startup(host);
             _configuration = startup.Configuration;
@@ -37,24 +35,7 @@
             _checkpoint = new Checkpoint();
         }
 
-        private static void FixEntryAssembly()
-        {
-            // http://dejanstojanovic.net/aspnet/2015/january/set-entry-assembly-in-unit-testing-methods/
-            AppDomainManager manager = new AppDomainManager();
-            FieldInfo entryAssemblyfield = manager.GetType()
-                .GetField("m_entryAssembly", BindingFlags.Instance | BindingFlags.NonPublic);
-            entryAssemblyfield?.SetValue(manager, typeof(Startup).Assembly);
-
-            AppDomain domain = AppDomain.CurrentDomain;
-            FieldInfo domainManagerField = domain.GetType()
-                .GetField("_domainManager", BindingFlags.Instance | BindingFlags.NonPublic);
-            domainManagerField?.SetValue(domain, manager);
-        }
-
-        public static void ResetCheckpoint()
-        {
-            _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
-        }
+        public static Task ResetCheckpoint() => _checkpoint.Reset(_configuration["Data:DefaultConnection:ConnectionString"]);
 
         public static async Task ExecuteScopeAsync(Func<IServiceProvider, Task> action)
         {

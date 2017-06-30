@@ -7,10 +7,12 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class EditTests
+    public class EditTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_get_edit_department_details()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
@@ -42,6 +44,7 @@
             result.Administrator.Id.ShouldBe(admin.Id);
         }
 
+        [Fact]
         public async Task Should_edit_department()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

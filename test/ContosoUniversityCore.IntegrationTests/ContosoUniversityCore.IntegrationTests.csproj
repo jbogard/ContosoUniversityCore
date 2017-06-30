@@ -21,12 +21,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="Fixie" Version="2.0.0-alpha-0001" />
-    <PackageReference Include="Shouldly" Version="2.8.2" />
-    <PackageReference Include="Respawn" Version="0.2.0" />
+    <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta1-build3642" />
+    <PackageReference Include="Shouldly" Version="2.8.3" />
+    <PackageReference Include="Respawn" Version="0.3.0-preview2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="FakeItEasy" Version="3.1.0" />
+    <PackageReference Include="FakeItEasy" Version="3.4.2" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="1.1.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta3-build3705" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">

@@ -39,11 +39,11 @@
                 .AddFeatureFolders()
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
             Mapper.AssertConfigurationIsValid();
 
-            services.AddMediatR();
+            services.AddMediatR(typeof(Startup));
             services.AddScoped(_ => new SchoolContext(Configuration["Data:DefaultConnection:ConnectionString"]));
             services.AddHtmlTags(new TagConventions());
         }

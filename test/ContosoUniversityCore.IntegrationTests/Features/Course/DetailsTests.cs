@@ -5,10 +5,12 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class DetailsTests
+    public class DetailsTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_query_for_details()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

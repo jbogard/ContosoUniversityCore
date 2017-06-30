@@ -6,10 +6,12 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class DeleteTests
+    public class DeleteTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_delete_department()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

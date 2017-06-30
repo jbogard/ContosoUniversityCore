@@ -5,12 +5,12 @@
     using ContosoUniversityCore.Features.Course;
     using Domain;
     using Shouldly;
-    using System.Linq;
-    using System.Data.Entity;
+    using Xunit;
     using static SliceFixture;
 
-    public class EditTests
+    public class EditTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_query_for_command()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
@@ -46,6 +46,7 @@
             result.Title.ShouldBe(course.Title);
         }
 
+        [Fact]
         public async Task Should_edit()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command

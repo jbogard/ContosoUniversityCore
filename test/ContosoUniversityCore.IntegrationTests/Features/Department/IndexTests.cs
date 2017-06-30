@@ -5,10 +5,12 @@
     using ContosoUniversityCore.Features.Department;
     using Domain;
     using Shouldly;
+    using Xunit;
     using static SliceFixture;
 
-    public class IndexTests
+    public class IndexTests : IntegrationTestBase
     {
+        [Fact]
         public async Task Should_list_departments()
         {
             var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
