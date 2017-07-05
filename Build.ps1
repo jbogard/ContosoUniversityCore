@@ -44,6 +44,15 @@ finally {
 	Pop-Location
 }
 
+Push-Location -Path .\test\ContosoUniversityCore.UnitTests
+
+try {
+	exec { & dotnet test -c Release --no-build }
+}
+finally {
+	Pop-Location
+}
+
 exec { & dotnet pack .\src\ContosoUniversityCore -c Release -o .\artifacts --version-suffix=$revision }
 
 

@@ -1,4 +1,6 @@
-﻿namespace ContosoUniversityCore.IntegrationTests
+﻿[assembly: Xunit.CollectionBehavior(DisableTestParallelization = true)]
+
+namespace ContosoUniversityCore.IntegrationTests
 {
     using System;
     using System.IO;
