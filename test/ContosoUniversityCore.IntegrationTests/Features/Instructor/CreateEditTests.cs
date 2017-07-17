@@ -59,6 +59,7 @@
             created.CourseInstructors.Count.ShouldBe(2);
         }
 
+        [Fact]
         public async Task Should_edit_instructor_details()
         {
             var englishDept = new Department
@@ -112,6 +113,7 @@
             edited.OfficeAssignment.Location.ShouldBe(command.OfficeAssignmentLocation);
         }
 
+        [Fact]
         public async Task Should_merge_course_instructors()
         {
             var englishDept = new Department

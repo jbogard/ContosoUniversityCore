@@ -36,4 +36,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  
 </Project>
