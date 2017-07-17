@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
-    using System;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Department;
     using Domain;
@@ -10,31 +9,14 @@
 
     public class IndexTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_list_departments()
+        [Theory, ConstruktionData]
+        public async Task Should_list_departments(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Department dept2)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
-            var dept2 = new Department
-            {
-                Name = "English",
-                Administrator = admin,
-                Budget = 456m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+            dept.Administrator = admin;
 
             await InsertAsync(dept, dept2);
 

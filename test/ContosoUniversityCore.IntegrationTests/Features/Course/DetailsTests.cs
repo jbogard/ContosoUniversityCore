@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Course
 {
-    using System;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Course;
     using Domain;
@@ -10,32 +9,16 @@
 
     public class DetailsTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_query_for_details()
+        [Theory, ConstruktionData]
+        public async Task Should_query_for_details(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Course course)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
 
-            var course = new Course
-            {
-                Credits = 4,
-                Department = dept,
-                Id = 1234,
-                Title = "English 101"
-            };
+            course.Id = 1234;
+            course.Department = dept;
 
             await InsertAsync(dept, course);
 

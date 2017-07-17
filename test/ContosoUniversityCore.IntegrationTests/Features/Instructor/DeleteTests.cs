@@ -1,7 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Instructor;
@@ -12,32 +10,17 @@
 
     public class DeleteTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_query_for_command()
+        [Theory, ConstruktionData]
+        public async Task Should_query_for_command(Department dept, Course course, CreateEdit.Command command)
         {
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
-            var command = new CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                OfficeAssignmentLocation = "Austin",
-                HireDate = DateTime.Today,
-                SelectedCourses = new []{ english101.Id.ToString()}
-            };
+            course.Id = 123;
+            course.Department = dept;
+
+            command.SelectedCourses = new[] { course.Id.ToString() };
+
             var instructorId = await SendAsync(command);
 
-            await InsertAsync(englishDept, english101);
+            await InsertAsync(dept, course);
 
             var result = await SendAsync(new Delete.Query { Id = instructorId });
 
@@ -46,40 +29,20 @@
             result.OfficeAssignmentLocation.ShouldBe(command.OfficeAssignmentLocation);
         }
 
-        public async Task Should_delete_instructor()
-        {
-            var instructorId = await SendAsync(new CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                OfficeAssignmentLocation = "Austin",
-                HireDate = DateTime.Today,
-            });
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today,
-                InstructorID = instructorId
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
+        [Theory, ConstruktionData]
+        public async Task Should_delete_instructor(CreateEdit.Command instructor, Department dept, Course course, CreateEdit.Command command)
+        {           
+            var instructorId = await SendAsync(instructor);
+            dept.InstructorID = instructorId;
+            course.Id = 123;
+            course.Department = dept;
 
-            await InsertAsync(englishDept, english101);
+            await InsertAsync(dept, course);           
 
-            await SendAsync(new CreateEdit.Command
-            {
-                Id = instructorId,
-                FirstMidName = "George",
-                LastName = "Costanza",
-                OfficeAssignmentLocation = "Austin",
-                HireDate = DateTime.Today,
-                SelectedCourses = new[] { english101.Id.ToString() }
-            });
+            command.Id = instructorId;
+            command.SelectedCourses = new[] { course.Id.ToString() };
+
+            await SendAsync(command);
 
             await SendAsync(new Delete.Command { ID = instructorId });
 
@@ -87,10 +50,10 @@
 
             instructorCount.ShouldBe(0);
 
-            var englishDeptId = englishDept.Id;
-            englishDept = await ExecuteDbContextAsync(db => db.Departments.FindAsync(englishDeptId));
+            var deptId = dept.Id;
+            dept = await ExecuteDbContextAsync(db => db.Departments.FindAsync(deptId));
 
-            englishDept.InstructorID.ShouldBeNull();
+            dept.InstructorID.ShouldBeNull();
 
             var courseInstructorCount = await ExecuteDbContextAsync(db => db.CourseInstructors.CountAsync());
 

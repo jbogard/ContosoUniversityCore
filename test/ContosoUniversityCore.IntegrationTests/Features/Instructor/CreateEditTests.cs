@@ -1,7 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,39 +11,17 @@
 
     public class CreateEditTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_create_new_instructor()
+        [Theory, ConstruktionData]
+        public async Task Should_create_new_instructor(Department dept, Course course, Course course2, CreateEdit.Command command)
         {
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
-            var english201 = new Course
-            {
-                Department = englishDept,
-                Title = "English 201",
-                Credits = 4,
-                Id = 456
-            };
+            course.Id = 123;
+            course.Department = dept;
+            course2.Id = 456;
+            course2.Department = dept;
 
-            await InsertAsync(englishDept, english101, english201);
+            await InsertAsync(dept, course, course2);
 
-            var command = new CreateEdit.Command
-            {
-                FirstMidName = "Jerry",
-                LastName = "Seinfeld",
-                HireDate = DateTime.Today,
-                OfficeAssignmentLocation = "Houston",
-                SelectedCourses = new [] {english101.Id.ToString(), english201.Id.ToString()}
-            };
+            command.SelectedCourses = new[] { course.Id.ToString(), course2.Id.ToString() };
 
             await SendAsync(command);
 
@@ -59,47 +35,19 @@
             created.CourseInstructors.Count.ShouldBe(2);
         }
 
-        public async Task Should_edit_instructor_details()
+        [Theory, ConstruktionData]
+        public async Task Should_edit_instructor_details(Department dept, Course course, Course course2, CreateEdit.Command instructor, CreateEdit.Command command)
         {
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
-            var english201 = new Course
-            {
-                Department = englishDept,
-                Title = "English 201",
-                Credits = 4,
-                Id = 456
-            };
+            course.Id = 123;
+            course.Department = dept;
+            course2.Id = 456;
+            course2.Department = dept;
 
-            await InsertAsync(englishDept, english101, english201);
+            await InsertAsync(dept, course, course2);
 
-            var instructorId = await SendAsync(new CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                OfficeAssignmentLocation = "Austin",
-                HireDate = DateTime.Today,
-            });
+            var instructorId = await SendAsync(instructor);
 
-            var command = new CreateEdit.Command
-            {
-                FirstMidName = "Jerry",
-                LastName = "Seinfeld",
-                HireDate = DateTime.Today,
-                OfficeAssignmentLocation = "Houston",
-                SelectedCourses = new string[0],
-                Id = instructorId
-            };
+            command.Id = instructorId;
 
             await SendAsync(command);
 
@@ -112,47 +60,21 @@
             edited.OfficeAssignment.Location.ShouldBe(command.OfficeAssignmentLocation);
         }
 
-        public async Task Should_merge_course_instructors()
+        [Theory, ConstruktionData]
+        public async Task Should_merge_course_instructors(Department dept, Course course, Course course2, CreateEdit.Command instructor, CreateEdit.Command command)
         {
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
-            var english201 = new Course
-            {
-                Department = englishDept,
-                Title = "English 201",
-                Credits = 4,
-                Id = 456
-            };
-            await InsertAsync(englishDept, english101, english201);
+            course.Id = 123;
+            course.Department = dept;
+            course2.Id = 456;
+            course2.Department = dept;
 
-            var instructorId = await SendAsync(new CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                OfficeAssignmentLocation = "Austin",
-                HireDate = DateTime.Today,
-                SelectedCourses = new[] { english101.Id.ToString() }
-            });
+            await InsertAsync(dept, course, course2);
 
-            var command = new CreateEdit.Command
-            {
-                FirstMidName = "Jerry",
-                LastName = "Seinfeld",
-                HireDate = DateTime.Today,
-                OfficeAssignmentLocation = "Houston",
-                SelectedCourses = new[] { english201.Id.ToString() },
-                Id = instructorId
-            };
+            instructor.SelectedCourses = new[] { course.Id.ToString() };
+            var instructorId = await SendAsync(instructor);
+
+            command.Id = instructorId;
+            command.SelectedCourses = new[] { course2.Id.ToString() };
 
             await SendAsync(command);
 
@@ -164,7 +86,7 @@
             edited.OfficeAssignment.ShouldNotBeNull();
             edited.OfficeAssignment.Location.ShouldBe(command.OfficeAssignmentLocation);
             edited.CourseInstructors.Count.ShouldBe(1);
-            edited.CourseInstructors.First().CourseID.ShouldBe(english201.Id);
+            edited.CourseInstructors.First().CourseID.ShouldBe(course2.Id);
         }
 
     }

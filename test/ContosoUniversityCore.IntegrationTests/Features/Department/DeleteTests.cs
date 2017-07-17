@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
-    using System;
     using System.Data.Entity;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Department;
@@ -11,24 +10,14 @@
 
     public class DeleteTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_delete_department()
+        [Theory, ConstruktionData]
+        public async Task Should_delete_department(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+
             await InsertAsync(dept);
 
             var command = new Delete.Command
