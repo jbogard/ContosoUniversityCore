@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Course
 {
-    using System;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -12,34 +11,18 @@
 
     public class CreateTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_create_new_course()
+        [Theory, ConstruktionData]
+        public async Task Should_create_new_course(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Create.Command command)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
 
             await InsertAsync(dept);
 
-            var command = new Create.Command
-            {
-                Credits = 4,
-                Department = dept,
-                Number = 1234,
-                Title = "English 101"
-            };
+            command.Department = dept;
+
             await SendAsync(command);
 
             var created = await ExecuteDbContextAsync(db => db.Courses.Where(c => c.Id == command.Number).SingleOrDefaultAsync());

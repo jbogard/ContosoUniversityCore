@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
-    using System;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -12,24 +11,14 @@
 
     public class EditTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_get_edit_department_details()
+        [Theory, ConstruktionData]
+        public async Task Should_get_edit_department_details(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+
             await InsertAsync(dept);
 
             var query = new Edit.Query
@@ -44,42 +33,21 @@
             result.Administrator.Id.ShouldBe(admin.Id);
         }
 
-        [Fact]
-        public async Task Should_edit_department()
+        [Theory, ConstruktionData]
+        public async Task Should_edit_department(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor2, Department dept, Edit.Command command)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var admin2Id = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var admin2Id = await SendAsync(instructor2);
             var admin2 = await FindAsync<Instructor>(admin2Id);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+
             await InsertAsync(dept);
 
-            var command = new Edit.Command
-            {
-                Id = dept.Id,
-                Name = "English",
-                Administrator = admin2,
-                StartDate = DateTime.Today.AddDays(-1),
-                Budget = 456m
-            };
+            command.Id = dept.Id;
+            command.Administrator = admin;
 
             await SendAsync(command);
 

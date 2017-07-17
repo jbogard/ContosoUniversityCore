@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
-    using System;
     using System.Data.Entity;
     using System.Linq;
     using System.Threading.Tasks;
@@ -12,24 +11,13 @@
 
     public class CreateTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_create_new_department()
+        [Theory, ConstruktionData]
+        public async Task Should_create_new_department(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Create.Command command)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var command = new Create.Command
-            {
-                Budget = 10m,
-                Name = "Engineering",
-                StartDate = DateTime.Now.Date,
-                Administrator = admin
-            };
+            command.Administrator = admin;
 
             await SendAsync(command);
 

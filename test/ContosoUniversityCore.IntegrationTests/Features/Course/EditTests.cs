@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Course
 {
-    using System;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Course;
     using Domain;
@@ -10,32 +9,17 @@
 
     public class EditTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_query_for_command()
+        [Theory, ConstruktionData]
+        public async Task Should_query_for_command(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Course course)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
 
-            var course = new Course
-            {
-                Credits = 4,
-                Department = dept,
-                Id = 1234,
-                Title = "English 101"
-            };
+            course.Id = 1234;
+            course.Department = dept;
+
             await InsertAsync(dept, course);
 
             var result = await SendAsync(new Edit.Query { Id = course.Id });
@@ -46,48 +30,23 @@
             result.Title.ShouldBe(course.Title);
         }
 
-        [Fact]
-        public async Task Should_edit()
+        [Theory, ConstruktionData]
+        public async Task Should_edit(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Department newDept, Course course, Edit.Command command)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var dept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
-            var newDept = new Department
-            {
-                Name = "English",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+            newDept.Administrator = admin;
 
-            var course = new Course
-            {
-                Credits = 4,
-                Department = dept,
-                Id = 1234,
-                Title = "English 101"
-            };
+            course.Id = 1234;
+            course.Department = dept;    
+       
             await InsertAsync(dept, newDept, course);
 
-            var command = new Edit.Command
-            {
-                Id = course.Id,
-                Credits = 5,
-                Department = newDept,
-                Title = "English 202"
-            };
+            command.Id = course.Id;
+            command.Department = newDept;
+
             await SendAsync(command);
 
             var edited = await FindAsync<Course>(course.Id);

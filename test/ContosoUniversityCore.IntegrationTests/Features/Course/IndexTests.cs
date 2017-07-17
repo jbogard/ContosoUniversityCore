@@ -1,6 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Course
 {
-    using System;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Course;
     using Domain;
@@ -10,47 +9,21 @@
 
     public class IndexTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_return_all_courses()
+        [Theory, ConstruktionData]
+        public async Task Should_return_all_courses(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Department dept2, Course course, Course course2)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var englishDept = new Department
-            {
-                Name = "English",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
-            var historyDept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+            dept2.Administrator = admin;
 
-            var english = new Course
-            {
-                Credits = 4,
-                Department = englishDept,
-                Id = 1235,
-                Title = "English 101"
-            };
-            var history = new Course
-            {
-                Credits = 4,
-                Department = historyDept,
-                Id = 4312,
-                Title = "History 101"
-            };
-            await InsertAsync(englishDept, historyDept, english, history);
+            course.Id = 1235;
+            course.Department = dept;
+            course2.Id = 4312;
+            course2.Department = dept2;
+
+            await InsertAsync(dept, dept2, course, course2);
 
             var result = await SendAsync(new Index.Query());
 
@@ -58,53 +31,27 @@
             result.Courses.Count.ShouldBe(2);
         }
 
-        [Fact]
-        public async Task Should_filter_courses()
+        [Theory, ConstruktionData]
+        public async Task Should_filter_courses(ContosoUniversityCore.Features.Instructor.CreateEdit.Command instructor, Department dept, Department dept2, Course course, Course course2)
         {
-            var adminId = await SendAsync(new ContosoUniversityCore.Features.Instructor.CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                HireDate = DateTime.Today,
-            });
+            var adminId = await SendAsync(instructor);
             var admin = await FindAsync<Instructor>(adminId);
 
-            var englishDept = new Department
-            {
-                Name = "English",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
-            var historyDept = new Department
-            {
-                Name = "History",
-                Administrator = admin,
-                Budget = 123m,
-                StartDate = DateTime.Today
-            };
+            dept.Administrator = admin;
+            dept2.Administrator = admin;
 
-            var english = new Course
-            {
-                Credits = 4,
-                Department = englishDept,
-                Id = 1235,
-                Title = "English 101"
-            };
-            var history = new Course
-            {
-                Credits = 4,
-                Department = historyDept,
-                Id = 4312,
-                Title = "History 101"
-            };
-            await InsertAsync(englishDept, historyDept, english, history);
+            course.Id = 1235;
+            course.Department = dept;
+            course2.Id = 4312;
+            course2.Department = dept2;
 
-            var result = await SendAsync(new Index.Query {SelectedDepartment = englishDept});
+            await InsertAsync(dept, dept2, course, course2);
+
+            var result = await SendAsync(new Index.Query {SelectedDepartment = dept});
 
             result.ShouldNotBeNull();
             result.Courses.Count.ShouldBe(1);
-            result.Courses[0].Id.ShouldBe(english.Id);
+            result.Courses[0].Id.ShouldBe(course.Id);
         }
     }
 }

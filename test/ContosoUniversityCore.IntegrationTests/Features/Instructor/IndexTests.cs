@@ -1,7 +1,5 @@
 ﻿namespace ContosoUniversityCore.IntegrationTests.Features.Instructor
 {
-    using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using ContosoUniversityCore.Features.Instructor;
     using Domain;
@@ -11,69 +9,30 @@
 
     public class IndexTests : IntegrationTestBase
     {
-        [Fact]
-        public async Task Should_get_list_instructor_with_details()
+        [Theory, ConstruktionData]
+        public async Task Should_get_list_instructor_with_details(Department dept, Course course, Course course2, CreateEdit.Command instructor, CreateEdit.Command instructor2, Student student1, Student student2)
         {
-            var englishDept = new Department
-            {
-                Name = "English",
-                StartDate = DateTime.Today
-            };
-            var english101 = new Course
-            {
-                Department = englishDept,
-                Title = "English 101",
-                Credits = 4,
-                Id = 123
-            };
-            var english201 = new Course
-            {
-                Department = englishDept,
-                Title = "English 201",
-                Credits = 4,
-                Id = 456
-            };
+            course.Id = 123;
+            course.Department = dept;
+            course2.Id = 456;
+            course2.Department = dept;                     
 
-            await InsertAsync(englishDept, english101, english201);
+            await InsertAsync(dept, course, course2);
 
-            var instructor1Id = await SendAsync(new CreateEdit.Command
-            {
-                FirstMidName = "George",
-                LastName = "Costanza",
-                SelectedCourses = new[] { english101.Id.ToString(), english201.Id.ToString() },
-                HireDate = DateTime.Today,
-                OfficeAssignmentLocation = "Austin",
-            });
+            instructor.SelectedCourses = new[] { course.Id.ToString(), course2.Id.ToString() };
 
-            await SendAsync(new CreateEdit.Command
-            {
-                OfficeAssignmentLocation = "Houston",
-                FirstMidName = "Jerry",
-                LastName = "Seinfeld",
-                HireDate = DateTime.Today,
-            });
+            var instructor1Id = await SendAsync(instructor);
 
-            var student1 = new Student
-            {
-                FirstMidName = "Cosmo",
-                LastName = "Kramer",
-                EnrollmentDate = DateTime.Today,
-            };
-            var student2 = new Student
-            {
-                FirstMidName = "Elaine",
-                LastName = "Benes",
-                EnrollmentDate = DateTime.Today
-            };
+            await SendAsync(instructor2);       
 
             await InsertAsync(student1, student2);
 
-            var enrollment1 = new Enrollment { StudentID = student1.Id, CourseID = english101.Id };
-            var enrollment2 = new Enrollment { StudentID = student2.Id, CourseID = english101.Id };
+            var enrollment1 = new Enrollment { StudentID = student1.Id, CourseID = course.Id };
+            var enrollment2 = new Enrollment { StudentID = student2.Id, CourseID = course.Id };
 
             await InsertAsync(enrollment1, enrollment2);
 
-            var result = await SendAsync(new Index.Query { Id = instructor1Id, CourseID = english101.Id });
+            var result = await SendAsync(new Index.Query { Id = instructor1Id, CourseID = course.Id });
 
             result.ShouldNotBeNull();
 
