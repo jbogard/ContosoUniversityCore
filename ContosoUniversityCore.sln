@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FD3C33CC-9B09-4FCC-A125-6C98781005A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EA54FDA7-1964-4624-9F47-4F9D0AAF9EB9}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		LICENSE = LICENSE
 		README.md = README.md
@@ -47,5 +48,8 @@ Global
 		{3D17A5D3-01A2-45DA-B8AC-509CAFF76F0E} = {FD3C33CC-9B09-4FCC-A125-6C98781005A5}
 		{CB356D13-3A01-480D-A94A-E5A184B5E7F5} = {33F34185-817A-4536-AD5D-78E8840BCCBC}
 		{908634B9-2A2E-4690-AEAE-84998F9BAA7B} = {33F34185-817A-4536-AD5D-78E8840BCCBC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1946F2AB-AC54-4003-9F3B-C9687DC3135E}
 	EndGlobalSection
 EndGlobal

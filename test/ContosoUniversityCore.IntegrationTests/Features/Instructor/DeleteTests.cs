@@ -46,6 +46,7 @@
             result.OfficeAssignmentLocation.ShouldBe(command.OfficeAssignmentLocation);
         }
 
+        [Fact]
         public async Task Should_delete_instructor()
         {
             var instructorId = await SendAsync(new CreateEdit.Command

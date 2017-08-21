@@ -13,6 +13,12 @@
     <None Update="wwwroot\**\*;Views;Areas\**\*.cshtml;Features\**\*.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+    <None Update="App_Data\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="..\tools\rh.exe">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +30,7 @@
     <PackageReference Include="EntityFramework" Version="6.1.3" />
     <PackageReference Include="EntityFramework.Extended" Version="6.1.0.168" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.1.1" />
-    <PackageReference Include="HtmlTags.AspNetCore" Version="4.2.0" />
+    <PackageReference Include="HtmlTags.AspNetCore" Version="5.0.0" />
     <PackageReference Include="MediatR" Version="3.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.0" />
@@ -48,10 +54,5 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
-    <Exec Command="dotnet bundle" />
-  </Target>
 
 </Project>
