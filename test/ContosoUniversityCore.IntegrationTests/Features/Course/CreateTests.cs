@@ -37,7 +37,7 @@
             {
                 Credits = 4,
                 Department = dept,
-                Number = 1234,
+                Number = NextCourseNumber(),
                 Title = "English 101"
             };
             await SendAsync(command);

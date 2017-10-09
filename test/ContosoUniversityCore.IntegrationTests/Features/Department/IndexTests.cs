@@ -1,4 +1,6 @@
-﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
+﻿using System.Linq;
+
+namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
     using System;
     using System.Threading.Tasks;
@@ -43,7 +45,9 @@
             var result = await SendAsync(query);
 
             result.ShouldNotBeNull();
-            result.Count.ShouldBe(2);
+            result.Count.ShouldBeGreaterThanOrEqualTo(2);
+            result.Select(m => m.Id).ShouldContain(dept.Id);
+            result.Select(m => m.Id).ShouldContain(dept2.Id);
         }
 
     }

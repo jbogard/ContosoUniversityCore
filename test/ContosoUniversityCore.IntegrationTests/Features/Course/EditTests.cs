@@ -33,7 +33,7 @@
             {
                 Credits = 4,
                 Department = dept,
-                Id = 1234,
+                Id = NextCourseNumber(),
                 Title = "English 101"
             };
             await InsertAsync(dept, course);
@@ -76,7 +76,7 @@
             {
                 Credits = 4,
                 Department = dept,
-                Id = 1234,
+                Id = NextCourseNumber(),
                 Title = "English 101"
             };
             await InsertAsync(dept, newDept, course);

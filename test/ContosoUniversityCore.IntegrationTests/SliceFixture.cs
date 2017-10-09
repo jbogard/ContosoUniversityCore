@@ -1,4 +1,4 @@
-﻿[assembly: Xunit.CollectionBehavior(DisableTestParallelization = true)]
+﻿using System.Threading;
 
 namespace ContosoUniversityCore.IntegrationTests
 {
@@ -25,8 +25,6 @@ namespace ContosoUniversityCore.IntegrationTests
             var host = A.Fake<IHostingEnvironment>();
 
             A.CallTo(() => host.ContentRootPath).Returns(Directory.GetCurrentDirectory());
-
-            //FixEntryAssembly();
 
             var startup = new Startup(host);
             _configuration = startup.Configuration;
@@ -132,5 +130,9 @@ namespace ContosoUniversityCore.IntegrationTests
                 return mediator.Send(request);
             });
         }
+
+        private static int CourseNumber = 1;
+
+        public static int NextCourseNumber() => Interlocked.Increment(ref CourseNumber);
     }
 }

@@ -6,6 +6,7 @@
     <AssemblyName>ContosoUniversityCore</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>ContosoUniversityCore</PackageId>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

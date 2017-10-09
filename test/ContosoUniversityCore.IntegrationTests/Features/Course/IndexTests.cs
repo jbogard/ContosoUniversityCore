@@ -40,14 +40,14 @@
             {
                 Credits = 4,
                 Department = englishDept,
-                Id = 1235,
+                Id = NextCourseNumber(),
                 Title = "English 101"
             };
             var history = new Course
             {
                 Credits = 4,
                 Department = historyDept,
-                Id = 4312,
+                Id = NextCourseNumber(),
                 Title = "History 101"
             };
             await InsertAsync(englishDept, historyDept, english, history);
@@ -55,7 +55,7 @@
             var result = await SendAsync(new Index.Query());
 
             result.ShouldNotBeNull();
-            result.Courses.Count.ShouldBe(2);
+            result.Courses.Count.ShouldBeGreaterThanOrEqualTo(2);
         }
 
         [Fact]
@@ -88,14 +88,14 @@
             {
                 Credits = 4,
                 Department = englishDept,
-                Id = 1235,
+                Id = NextCourseNumber(),
                 Title = "English 101"
             };
             var history = new Course
             {
                 Credits = 4,
                 Department = historyDept,
-                Id = 4312,
+                Id = NextCourseNumber(),
                 Title = "History 101"
             };
             await InsertAsync(englishDept, historyDept, english, history);

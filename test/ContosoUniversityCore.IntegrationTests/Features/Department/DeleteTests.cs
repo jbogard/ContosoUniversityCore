@@ -1,4 +1,6 @@
-﻿namespace ContosoUniversityCore.IntegrationTests.Features.Department
+﻿using System.Linq;
+
+namespace ContosoUniversityCore.IntegrationTests.Features.Department
 {
     using System;
     using System.Data.Entity;
@@ -39,7 +41,7 @@
 
             await SendAsync(command);
 
-            var any = await ExecuteDbContextAsync(db => db.Departments.AnyAsync());
+            var any = await ExecuteDbContextAsync(db => db.Departments.Where(d => d.Id == command.Id).AnyAsync());
 
             any.ShouldBeFalse();
         }
