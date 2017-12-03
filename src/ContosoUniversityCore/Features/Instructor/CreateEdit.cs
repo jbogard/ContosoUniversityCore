@@ -79,7 +79,7 @@
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Command>
+        public class QueryHandler : AsyncRequestHandler<Query, Command>
         {
             private readonly SchoolContext _db;
 
@@ -88,7 +88,7 @@
                 _db = db;
             }
 
-            public async Task<Command> Handle(Query message)
+            protected override async Task<Command> HandleCore(Query message)
             {
                 Command model;
                 if (message.Id == null)
@@ -122,7 +122,7 @@
 
         }
 
-        public class CommandHandler : IAsyncRequestHandler<Command, int>
+        public class CommandHandler : AsyncRequestHandler<Command, int>
         {
             private readonly SchoolContext _db;
 
@@ -131,7 +131,7 @@
                 _db = db;
             }
 
-            public async Task<int> Handle(Command message)
+            protected override async Task<int> HandleCore(Command message)
             {
                 Instructor instructor;
                 if (message.Id == null)

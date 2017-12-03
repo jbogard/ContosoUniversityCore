@@ -28,7 +28,7 @@
 
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Model>
+        public class QueryHandler : AsyncRequestHandler<Query, Model>
         {
             private readonly SchoolContext _context;
 
@@ -37,7 +37,7 @@
                 _context = context;
             }
 
-            public async Task<Model> Handle(Query message)
+            protected override async Task<Model> HandleCore(Query message)
             {
                 string query = @"
 SELECT d.*, p.LastName + ', ' + p.FirstName AS [AdministratorFullName]

@@ -24,7 +24,7 @@
             }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Command>
+        public class QueryHandler : AsyncRequestHandler<Query, Command>
         {
             private readonly SchoolContext _db;
 
@@ -33,7 +33,7 @@
                 _db = db;
             }
 
-            public Task<Command> Handle(Query message)
+            protected override Task<Command> HandleCore(Query message)
             {
                 return _db.Courses.Where(c => c.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
@@ -57,7 +57,7 @@
             }
         }
 
-        public class CommandHandler : IAsyncRequestHandler<Command>
+        public class CommandHandler : AsyncRequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -66,7 +66,7 @@
                 _db = db;
             }
 
-            public async Task Handle(Command message)
+            protected override async Task HandleCore(Command message)
             {
                 var course = await _db.Courses.FindAsync(message.Id);
 

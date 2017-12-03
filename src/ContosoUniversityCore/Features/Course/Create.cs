@@ -17,7 +17,7 @@
             public Department Department { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : RequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -26,7 +26,7 @@
                 _db = db;
             }
 
-            public void Handle(Command message)
+            protected override void HandleCore(Command message)
             {
                 var course = Mapper.Map<Command, Course>(message);
                 course.Id = message.Number;

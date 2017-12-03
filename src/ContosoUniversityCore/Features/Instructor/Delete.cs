@@ -41,7 +41,7 @@
             public string OfficeAssignmentLocation { get; set; }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Command>
+        public class QueryHandler : AsyncRequestHandler<Query, Command>
         {
             private readonly SchoolContext _db;
 
@@ -50,13 +50,13 @@
                 _db = db;
             }
 
-            public Task<Command> Handle(Query message)
+            protected override Task<Command> HandleCore(Query message)
             {
                 return _db.Instructors.Where(i => i.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
-        public class CommandHandler : IAsyncRequestHandler<Command>
+        public class CommandHandler : AsyncRequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -65,7 +65,7 @@
                 _db = db;
             }
 
-            public async Task Handle(Command message)
+            protected override async Task HandleCore(Command message)
             {
                 Instructor instructor = await _db.Instructors
                     .Include(i => i.OfficeAssignment)

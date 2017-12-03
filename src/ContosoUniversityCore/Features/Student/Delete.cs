@@ -24,7 +24,7 @@
             public DateTime EnrollmentDate { get; set; }
         }
 
-        public class QueryHandler : IAsyncRequestHandler<Query, Command>
+        public class QueryHandler : AsyncRequestHandler<Query, Command>
         {
             private readonly SchoolContext _db;
 
@@ -33,13 +33,13 @@
                 _db = db;
             }
 
-            public async Task<Command> Handle(Query message)
+            protected override async Task<Command> HandleCore(Query message)
             {
                 return await _db.Students.Where(s => s.Id == message.Id).ProjectToSingleOrDefaultAsync<Command>();
             }
         }
 
-        public class CommandHandler : IAsyncRequestHandler<Command>
+        public class CommandHandler : AsyncRequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -48,7 +48,7 @@
                 _db = db;
             }
 
-            public async Task Handle(Command message)
+            protected override async Task HandleCore(Command message)
             {
                 var student = await _db.Students.FindAsync(message.ID);
 

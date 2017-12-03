@@ -30,7 +30,7 @@
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : RequestHandler<Command>
         {
             private readonly SchoolContext _db;
 
@@ -39,7 +39,7 @@
                 _db = db;
             }
 
-            public void Handle(Command message)
+            protected override void HandleCore(Command message)
             {
                 var student = Mapper.Map<Command, Student>(message);
 

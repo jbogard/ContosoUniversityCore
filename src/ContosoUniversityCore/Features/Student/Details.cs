@@ -33,7 +33,7 @@
             }
         }
 
-        public class Handler : IAsyncRequestHandler<Query, Model>
+        public class Handler : AsyncRequestHandler<Query, Model>
         {
             private readonly SchoolContext _db;
 
@@ -42,7 +42,7 @@
                 _db = db;
             }
 
-            public async Task<Model> Handle(Query message)
+            protected override async Task<Model> HandleCore(Query message)
             {
                 return await _db.Students.Where(s => s.Id == message.Id).ProjectToSingleOrDefaultAsync<Model>();
             }

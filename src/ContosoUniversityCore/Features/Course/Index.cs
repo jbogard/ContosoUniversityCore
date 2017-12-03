@@ -29,7 +29,7 @@
             }
         }
 
-        public class Handler : IAsyncRequestHandler<Query, Result>
+        public class Handler : AsyncRequestHandler<Query, Result>
         {
             private readonly SchoolContext _db;
 
@@ -38,7 +38,7 @@
                 _db = db;
             }
 
-            public async Task<Result> Handle(Query message)
+            protected override async Task<Result> HandleCore(Query message)
             {
                 int? departmentID = message.SelectedDepartment?.Id;
 
